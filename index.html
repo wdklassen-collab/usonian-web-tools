@@ -248,8 +248,8 @@
     if (p.scale <= 0 || p.nutWidth <= 0 || p.width14 <= 0 || p.slotWidth <= 0) {
       throw new Error("Scale length, widths, and fret-slot width must be greater than zero.");
     }
-    if (p.width14 <= p.nutWidth) {
-      throw new Error("Width at the 14th fret must be greater than the nut width.");
+    if (p.width14 < p.nutWidth) {
+      throw new Error("Width at the 14th fret cannot be less than the nut width.");
     }
     if (p.extension < 0 || p.slotOverrun < 0) {
       throw new Error("Extension and slot overrun cannot be negative.");
