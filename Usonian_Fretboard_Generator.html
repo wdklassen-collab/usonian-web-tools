@@ -1,0 +1,438 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Usonian Fretboard Generator</title>
+  <style>
+    :root {
+      --walnut: #4B2E15;
+      --copper: #C16E36;
+      --tan: #E6D5B8;
+      --charcoal: #2E2E2E;
+      --paper: #fffdf8;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      font-family: Arial, Helvetica, sans-serif;
+      color: var(--charcoal);
+      background: #f4f1ea;
+    }
+    header {
+      background: var(--walnut);
+      color: white;
+      padding: 18px 24px;
+      border-bottom: 5px solid var(--copper);
+    }
+    header h1 { margin: 0; font-size: 1.55rem; letter-spacing: .04em; }
+    header p { margin: 5px 0 0; opacity: .9; }
+    main {
+      display: grid;
+      grid-template-columns: minmax(300px, 380px) 1fr;
+      gap: 18px;
+      padding: 18px;
+      max-width: 1400px;
+      margin: auto;
+    }
+    .panel {
+      background: var(--paper);
+      border: 1px solid #d4cec2;
+      border-radius: 8px;
+      padding: 18px;
+      box-shadow: 0 2px 8px rgba(0,0,0,.06);
+    }
+    .field {
+      display: grid;
+      grid-template-columns: 1fr 125px;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 11px;
+    }
+    label { font-weight: 600; font-size: .93rem; }
+    input, select, button {
+      font: inherit;
+      border: 1px solid #aaa;
+      border-radius: 5px;
+      padding: 8px 9px;
+    }
+    input[type=checkbox] { width: auto; }
+    .check {
+      display: flex;
+      gap: 9px;
+      align-items: center;
+      margin: 8px 0;
+    }
+    button {
+      cursor: pointer;
+      font-weight: 700;
+      border: none;
+      background: var(--copper);
+      color: white;
+      padding: 10px 13px;
+    }
+    button.secondary { background: var(--charcoal); }
+    .buttons {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 9px;
+      margin-top: 16px;
+    }
+    .note {
+      font-size: .83rem;
+      line-height: 1.4;
+      background: var(--tan);
+      padding: 10px;
+      border-radius: 5px;
+      margin-top: 14px;
+    }
+    #message {
+      min-height: 22px;
+      margin: 10px 0 0;
+      font-weight: 700;
+    }
+    #message.error { color: #9b1c1c; }
+    #message.ok { color: #27632a; }
+    #previewWrap {
+      overflow: auto;
+      min-height: 720px;
+      background: white;
+      border: 1px solid #ccc;
+      border-radius: 6px;
+    }
+    #preview {
+      display: block;
+      width: 100%;
+      min-width: 500px;
+      min-height: 700px;
+    }
+    .summary {
+      margin-bottom: 12px;
+      display: grid;
+      grid-template-columns: repeat(4, minmax(110px, 1fr));
+      gap: 8px;
+    }
+    .summary div {
+      border-left: 4px solid var(--copper);
+      background: #f7f4ed;
+      padding: 8px 10px;
+    }
+    .summary small { display: block; color: #666; }
+    .summary strong { display: block; margin-top: 3px; }
+    @media (max-width: 850px) {
+      main { grid-template-columns: 1fr; }
+      .summary { grid-template-columns: repeat(2, 1fr); }
+    }
+  </style>
+</head>
+<body>
+<header>
+  <h1>USONIAN FRETBOARD GENERATOR</h1>
+  <p>Create a tapered fretboard outline and equal-tempered fret-slot layout for import into Easel.</p>
+</header>
+
+<main>
+  <section class="panel">
+    <div class="field">
+      <label for="units">Units</label>
+      <select id="units">
+        <option value="in">Inches</option>
+        <option value="mm">Millimeters</option>
+      </select>
+    </div>
+    <div class="field">
+      <label for="scale">Scale length</label>
+      <input id="scale" type="number" min="1" step="0.001" value="25.4">
+    </div>
+    <div class="field">
+      <label for="nutWidth">Nut width</label>
+      <input id="nutWidth" type="number" min="0.1" step="0.001" value="1.750">
+    </div>
+    <div class="field">
+      <label for="width14">Width at 14th fret</label>
+      <input id="width14" type="number" min="0.1" step="0.001" value="2.125">
+    </div>
+    <div class="field">
+      <label for="frets">Number of frets</label>
+      <input id="frets" type="number" min="1" max="36" step="1" value="20">
+    </div>
+    <div class="field">
+      <label for="extension">Extension past last fret</label>
+      <input id="extension" type="number" min="0" step="0.001" value="0.250">
+    </div>
+    <div class="field">
+      <label for="slotWidth">Fret-slot width</label>
+      <input id="slotWidth" type="number" min="0.001" step="0.001" value="0.023">
+    </div>
+    <div class="field">
+      <label for="slotOverrun">Slot overrun per side</label>
+      <input id="slotOverrun" type="number" min="0" step="0.001" value="0.030">
+    </div>
+
+    <div class="check">
+      <input id="centerline" type="checkbox" checked>
+      <label for="centerline">Include centerline</label>
+    </div>
+    <div class="check">
+      <input id="nutline" type="checkbox" checked>
+      <label for="nutline">Include nut line</label>
+    </div>
+    <div class="check">
+      <input id="labels" type="checkbox">
+      <label for="labels">Include fret-number labels</label>
+    </div>
+
+    <div class="buttons">
+      <button id="generate">Generate</button>
+      <button id="download" class="secondary">Download SVG</button>
+    </div>
+    <div id="message"></div>
+
+    <div class="note">
+      The SVG uses separate groups for the perimeter, fret slots, centerline, nut line, and labels.
+      After import into Easel, assign cut depth and tool settings to each group. Fret slots are exported
+      as thin closed rectangles matching the specified slot width.
+    </div>
+  </section>
+
+  <section class="panel">
+    <div class="summary">
+      <div><small>12th fret</small><strong id="s12">—</strong></div>
+      <div><small>14th fret</small><strong id="s14">—</strong></div>
+      <div><small>Board length</small><strong id="sLength">—</strong></div>
+      <div><small>End width</small><strong id="sEndWidth">—</strong></div>
+    </div>
+    <div id="previewWrap">
+      <svg id="preview" xmlns="http://www.w3.org/2000/svg"></svg>
+    </div>
+  </section>
+</main>
+
+<script>
+(() => {
+  "use strict";
+
+  const $ = (id) => document.getElementById(id);
+  const SVG_NS = "http://www.w3.org/2000/svg";
+  let lastSvgText = "";
+
+  function numeric(id) {
+    return Number($(id).value);
+  }
+
+  function factorToMm() {
+    return $("units").value === "in" ? 25.4 : 1;
+  }
+
+  function displayValue(mm) {
+    const inches = $("units").value === "in";
+    const value = inches ? mm / 25.4 : mm;
+    return `${value.toFixed(inches ? 4 : 2)} ${inches ? "in" : "mm"}`;
+  }
+
+  function fretPosition(scale, fret) {
+    return scale * (1 - Math.pow(2, -fret / 12));
+  }
+
+  function widthAt(position, nutWidth, width14, fret14Pos) {
+    return nutWidth + (width14 - nutWidth) * (position / fret14Pos);
+  }
+
+  function validate(p) {
+    if (![p.scale, p.nutWidth, p.width14, p.extension, p.slotWidth, p.slotOverrun].every(Number.isFinite)) {
+      throw new Error("All dimensions must be valid numbers.");
+    }
+    if (!Number.isInteger(p.frets) || p.frets < 1 || p.frets > 36) {
+      throw new Error("Number of frets must be a whole number from 1 to 36.");
+    }
+    if (p.scale <= 0 || p.nutWidth <= 0 || p.width14 <= 0 || p.slotWidth <= 0) {
+      throw new Error("Scale length, widths, and fret-slot width must be greater than zero.");
+    }
+    if (p.width14 <= p.nutWidth) {
+      throw new Error("Width at the 14th fret must be greater than the nut width.");
+    }
+    if (p.extension < 0 || p.slotOverrun < 0) {
+      throw new Error("Extension and slot overrun cannot be negative.");
+    }
+    if (p.slotWidth > p.scale / 20) {
+      throw new Error("Fret-slot width appears too large for the selected scale.");
+    }
+  }
+
+  function getParams() {
+    const f = factorToMm();
+    const p = {
+      units: $("units").value,
+      scale: numeric("scale") * f,
+      nutWidth: numeric("nutWidth") * f,
+      width14: numeric("width14") * f,
+      frets: Math.round(numeric("frets")),
+      extension: numeric("extension") * f,
+      slotWidth: numeric("slotWidth") * f,
+      slotOverrun: numeric("slotOverrun") * f,
+      centerline: $("centerline").checked,
+      nutline: $("nutline").checked,
+      labels: $("labels").checked
+    };
+    validate(p);
+    return p;
+  }
+
+  function rectPath(cx, cy, width, height) {
+    const x1 = cx - width / 2;
+    const x2 = cx + width / 2;
+    const y1 = cy - height / 2;
+    const y2 = cy + height / 2;
+    return `M ${x1.toFixed(4)} ${y1.toFixed(4)} L ${x2.toFixed(4)} ${y1.toFixed(4)} ` +
+           `L ${x2.toFixed(4)} ${y2.toFixed(4)} L ${x1.toFixed(4)} ${y2.toFixed(4)} Z`;
+  }
+
+  function makeSvg(p) {
+    const fret14 = fretPosition(p.scale, 14);
+    const lastFret = fretPosition(p.scale, p.frets);
+    const boardLength = lastFret + p.extension;
+    const endWidth = widthAt(boardLength, p.nutWidth, p.width14, fret14);
+    const margin = Math.max(12, endWidth * 0.35);
+    const labelMargin = p.labels ? 12 : 0;
+    const viewWidth = endWidth + margin * 2 + labelMargin;
+    const viewHeight = boardLength + margin * 2;
+
+    const xCenter = viewWidth / 2;
+    const yNut = margin;
+    const xNutLeft = xCenter - p.nutWidth / 2;
+    const xNutRight = xCenter + p.nutWidth / 2;
+    const xEndLeft = xCenter - endWidth / 2;
+    const xEndRight = xCenter + endWidth / 2;
+    const yEnd = yNut + boardLength;
+
+    const perimeter = `M ${xNutLeft.toFixed(4)} ${yNut.toFixed(4)} ` +
+                      `L ${xNutRight.toFixed(4)} ${yNut.toFixed(4)} ` +
+                      `L ${xEndRight.toFixed(4)} ${yEnd.toFixed(4)} ` +
+                      `L ${xEndLeft.toFixed(4)} ${yEnd.toFixed(4)} Z`;
+
+    const slotPaths = [];
+    const labelNodes = [];
+
+    for (let n = 1; n <= p.frets; n++) {
+      const d = fretPosition(p.scale, n);
+      const w = widthAt(d, p.nutWidth, p.width14, fret14) + p.slotOverrun * 2;
+      const y = yNut + d;
+      slotPaths.push(`<path d="${rectPath(xCenter, y, w, p.slotWidth)}" />`);
+      if (p.labels) {
+        const labelX = xCenter + w / 2 + 4;
+        labelNodes.push(`<text x="${labelX.toFixed(4)}" y="${(y + 1.5).toFixed(4)}">${n}</text>`);
+      }
+    }
+
+    const centerline = p.centerline
+      ? `<g id="CENTERLINE" fill="none" stroke="#0080ff" stroke-width="0.20">
+           <path d="M ${xCenter.toFixed(4)} ${yNut.toFixed(4)} L ${xCenter.toFixed(4)} ${yEnd.toFixed(4)}" />
+         </g>` : "";
+
+    const nutline = p.nutline
+      ? `<g id="NUT_LINE" fill="none" stroke="#00a040" stroke-width="0.20">
+           <path d="M ${xNutLeft.toFixed(4)} ${yNut.toFixed(4)} L ${xNutRight.toFixed(4)} ${yNut.toFixed(4)}" />
+         </g>` : "";
+
+    const labels = p.labels
+      ? `<g id="FRET_LABELS" font-family="Arial, sans-serif" font-size="4" fill="#555">${labelNodes.join("")}</g>`
+      : "";
+
+    const metadata = {
+      generator: "Usonian Fretboard Generator",
+      version: "1.0",
+      scaleLengthMm: p.scale,
+      nutWidthMm: p.nutWidth,
+      widthAt14Mm: p.width14,
+      numberOfFrets: p.frets,
+      extensionMm: p.extension,
+      slotWidthMm: p.slotWidth,
+      boardLengthMm: boardLength,
+      endWidthMm: endWidth
+    };
+
+    const svg = `<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="${SVG_NS}" width="${viewWidth.toFixed(4)}mm" height="${viewHeight.toFixed(4)}mm"
+     viewBox="0 0 ${viewWidth.toFixed(4)} ${viewHeight.toFixed(4)}">
+  <title>Usonian Guitar Fretboard</title>
+  <desc>${JSON.stringify(metadata)}</desc>
+  <g id="FRETBOARD_PERIMETER" fill="none" stroke="#000000" stroke-width="0.25">
+    <path d="${perimeter}" />
+  </g>
+  <g id="FRET_SLOTS" fill="#000000" stroke="none">
+    ${slotPaths.join("\n    ")}
+  </g>
+  ${centerline}
+  ${nutline}
+  ${labels}
+</svg>`;
+
+    return { svg, fret14, boardLength, endWidth };
+  }
+
+  function render() {
+    const message = $("message");
+    try {
+      const p = getParams();
+      const result = makeSvg(p);
+      lastSvgText = result.svg;
+
+      const parser = new DOMParser();
+      const doc = parser.parseFromString(result.svg, "image/svg+xml");
+      const imported = document.importNode(doc.documentElement, true);
+      imported.removeAttribute("width");
+      imported.removeAttribute("height");
+      imported.setAttribute("preserveAspectRatio", "xMidYMid meet");
+
+      const preview = $("preview");
+      preview.replaceWith(imported);
+      imported.id = "preview";
+
+      $("s12").textContent = displayValue(fretPosition(p.scale, 12));
+      $("s14").textContent = displayValue(result.fret14);
+      $("sLength").textContent = displayValue(result.boardLength);
+      $("sEndWidth").textContent = displayValue(result.endWidth);
+
+      message.className = "ok";
+      message.textContent = "Fretboard generated.";
+    } catch (err) {
+      message.className = "error";
+      message.textContent = err.message;
+    }
+  }
+
+  function downloadSvg() {
+    if (!lastSvgText) render();
+    if (!lastSvgText) return;
+    const blob = new Blob([lastSvgText], { type: "image/svg+xml;charset=utf-8" });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement("a");
+    const scale = $("scale").value.replace(".", "_");
+    a.href = url;
+    a.download = `Usonian_Fretboard_${scale}_${$("frets").value}frets.svg`;
+    document.body.appendChild(a);
+    a.click();
+    a.remove();
+    setTimeout(() => URL.revokeObjectURL(url), 1000);
+  }
+
+  $("generate").addEventListener("click", render);
+  $("download").addEventListener("click", downloadSvg);
+  $("units").addEventListener("change", () => {
+    const current = $("units").value;
+    const toInches = current === "in";
+    const ids = ["scale", "nutWidth", "width14", "extension", "slotWidth", "slotOverrun"];
+    ids.forEach(id => {
+      const el = $(id);
+      const val = Number(el.value);
+      if (!Number.isFinite(val)) return;
+      el.value = (toInches ? val / 25.4 : val * 25.4).toFixed(toInches ? 4 : 2);
+    });
+    render();
+  });
+
+  render();
+})();
+</script>
+</body>
+</html>
