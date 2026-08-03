@@ -128,7 +128,7 @@
 <body>
 <header>
   <h1>USONIAN FRETBOARD GENERATOR</h1>
-  <p>Create a tapered fretboard outline and equal-tempered fret-slot layout for import into Easel. Version 1.1.0</p>
+  <p>Create a tapered fretboard outline and equal-tempered fret-slot layout for import into Easel. (v1.1.0)</p>
 </header>
 
 <main>
@@ -182,6 +182,11 @@
       <label for="labels">Include fret-number labels</label>
     </div>
 
+    <div class="check">
+      <input id="measurements" type="checkbox" checked>
+      <label for="measurements">Show fret measurements</label>
+    </div>
+
     <div class="buttons">
       <button id="generate">Generate</button>
       <button id="download" class="secondary">Download SVG</button>
@@ -201,24 +206,7 @@
       <div><small>14th fret</small><strong id="s14">—</strong></div>
       <div><small>Board length</small><strong id="sLength">—</strong></div>
       <div><small>End width</small><strong id="sEndWidth">—</strong></div>
-    
-<div id="shopPanel" style="margin-bottom:14px;border:1px solid #ccc;border-radius:6px;padding:12px;background:#faf8f3">
-  <h3 style="margin:0 0 8px 0;">Shop Drawing</h3>
-  <p style="margin:0 0 10px 0;font-size:.9rem">
-    Print this page for your notebook. Use <b>Download SVG</b> for CNC.
-  </p>
-  <table id="measureTable" style="width:100%;border-collapse:collapse;font-size:.9rem">
-    <thead>
-      <tr>
-        <th align="left">Fret</th>
-        <th align="right">From Nut</th>
-        <th align="right">Fret-to-Fret</th>
-      </tr>
-    </thead>
-    <tbody></tbody>
-  </table>
-</div>
-</div>
+    </div>
     <div id="previewWrap">
       <svg id="preview" xmlns="http://www.w3.org/2000/svg"></svg>
     </div>
@@ -289,7 +277,8 @@
       slotOverrun: numeric("slotOverrun") * f,
       centerline: $("centerline").checked,
       nutline: $("nutline").checked,
-      labels: $("labels").checked
+      labels: $("labels").checked,
+      measurements: $("measurements").checked
     };
     validate(p);
     return p;
@@ -329,6 +318,7 @@
 
     const slotPaths = [];
     const labelNodes = [];
+    const measurementNodes = [];
 
     for (let n = 1; n <= p.frets; n++) {
       const d = fretPosition(p.scale, n);
@@ -336,8 +326,13 @@
       const y = yNut + d;
       slotPaths.push(`<path d="${rectPath(xCenter, y, w, p.slotWidth)}" />`);
       if (p.labels) {
-        const labelX = xCenter + w / 2 + 4;
-        labelNodes.push(`<text x="${labelX.toFixed(4)}" y="${(y + 1.5).toFixed(4)}">${n}</text>`);
+        const labelX = xCenter - (w / 2) - 10;
+        labelNodes.push(`<text text-anchor="end" x="${labelX.toFixed(4)}" y="${(y + 1.5).toFixed(4)}">${n}</text>`);
+      }
+      if (p.measurements) {
+        const mx = xCenter + (w / 2) + 10;
+        const val = (p.units==="in" ? (d/25.4).toFixed(4) : d.toFixed(2));
+        measurementNodes.push(`<text x="${mx.toFixed(4)}" y="${(y + 1.5).toFixed(4)}">${val}</text>`);
       }
     }
 
@@ -353,6 +348,9 @@
 
     const labels = p.labels
       ? `<g id="FRET_LABELS" font-family="Arial, sans-serif" font-size="4" fill="#555">${labelNodes.join("")}</g>`
+      : "";
+    const measurements = p.measurements
+      ? `<g id="FRET_MEASUREMENTS" font-family="Arial, sans-serif" font-size="4" fill="#555">${measurementNodes.join("")}</g>`
       : "";
 
     const metadata = {
@@ -382,6 +380,7 @@
   ${centerline}
   ${nutline}
   ${labels}
+  ${measurements}
 </svg>`;
 
     return { svg, fret14, boardLength, endWidth };
@@ -411,7 +410,6 @@
       $("sEndWidth").textContent = displayValue(result.endWidth);
 
       message.className = "ok";
-      updateMeasurementTable(p);
       message.textContent = "Fretboard generated.";
     } catch (err) {
       message.className = "error";
@@ -419,24 +417,7 @@
     }
   }
 
-  
-function updateMeasurementTable(p){
-  const body=document.querySelector("#measureTable tbody");
-  if(!body) return;
-  body.innerHTML="";
-  let prev=0;
-  for(let i=1;i<=p.frets;i++){
-    const pos=fretPosition(p.scale,i);
-    const tr=document.createElement("tr");
-    tr.innerHTML=`<td>${i}</td>
-    <td align="right">${displayValue(pos)}</td>
-    <td align="right">${displayValue(pos-prev)}</td>`;
-    body.appendChild(tr);
-    prev=pos;
-  }
-}
-
-function downloadSvg() {
+  function downloadSvg() {
     if (!lastSvgText) render();
     if (!lastSvgText) return;
     const blob = new Blob([lastSvgText], { type: "image/svg+xml;charset=utf-8" });
@@ -469,10 +450,5 @@ function downloadSvg() {
   render();
 })();
 </script>
-
-<footer style="max-width:1400px;margin:12px auto 24px;padding:0 18px;color:#666;font-size:.85rem;text-align:right">
-Usonian Fretboard Generator &nbsp;|&nbsp; Version 1.1.0 &nbsp;|&nbsp; Build 2026-08-03
-</footer>
 </body>
-
 </html>
