@@ -128,7 +128,7 @@
 <body>
 <header>
   <h1>USONIAN FRETBOARD GENERATOR</h1>
-  <p>Create a tapered fretboard outline and equal-tempered fret-slot layout for import into Easel.</p>
+  <p>Create a tapered fretboard outline and equal-tempered fret-slot layout for import into Easel. Version 1.1.0</p>
 </header>
 
 <main>
@@ -201,7 +201,24 @@
       <div><small>14th fret</small><strong id="s14">—</strong></div>
       <div><small>Board length</small><strong id="sLength">—</strong></div>
       <div><small>End width</small><strong id="sEndWidth">—</strong></div>
-    </div>
+    
+<div id="shopPanel" style="margin-bottom:14px;border:1px solid #ccc;border-radius:6px;padding:12px;background:#faf8f3">
+  <h3 style="margin:0 0 8px 0;">Shop Drawing</h3>
+  <p style="margin:0 0 10px 0;font-size:.9rem">
+    Print this page for your notebook. Use <b>Download SVG</b> for CNC.
+  </p>
+  <table id="measureTable" style="width:100%;border-collapse:collapse;font-size:.9rem">
+    <thead>
+      <tr>
+        <th align="left">Fret</th>
+        <th align="right">From Nut</th>
+        <th align="right">Fret-to-Fret</th>
+      </tr>
+    </thead>
+    <tbody></tbody>
+  </table>
+</div>
+</div>
     <div id="previewWrap">
       <svg id="preview" xmlns="http://www.w3.org/2000/svg"></svg>
     </div>
@@ -394,6 +411,7 @@
       $("sEndWidth").textContent = displayValue(result.endWidth);
 
       message.className = "ok";
+      updateMeasurementTable(p);
       message.textContent = "Fretboard generated.";
     } catch (err) {
       message.className = "error";
@@ -401,7 +419,24 @@
     }
   }
 
-  function downloadSvg() {
+  
+function updateMeasurementTable(p){
+  const body=document.querySelector("#measureTable tbody");
+  if(!body) return;
+  body.innerHTML="";
+  let prev=0;
+  for(let i=1;i<=p.frets;i++){
+    const pos=fretPosition(p.scale,i);
+    const tr=document.createElement("tr");
+    tr.innerHTML=`<td>${i}</td>
+    <td align="right">${displayValue(pos)}</td>
+    <td align="right">${displayValue(pos-prev)}</td>`;
+    body.appendChild(tr);
+    prev=pos;
+  }
+}
+
+function downloadSvg() {
     if (!lastSvgText) render();
     if (!lastSvgText) return;
     const blob = new Blob([lastSvgText], { type: "image/svg+xml;charset=utf-8" });
@@ -434,5 +469,10 @@
   render();
 })();
 </script>
+
+<footer style="max-width:1400px;margin:12px auto 24px;padding:0 18px;color:#666;font-size:.85rem;text-align:right">
+Usonian Fretboard Generator &nbsp;|&nbsp; Version 1.1.0 &nbsp;|&nbsp; Build 2026-08-03
+</footer>
 </body>
+
 </html>
