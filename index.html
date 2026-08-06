@@ -1,424 +1,236 @@
 <!doctype html>
 <html lang="en">
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Usonian Fretboard Generator</title>
-  <style>
-    :root {
-      --walnut: #4B2E15;
-      --copper: #C16E36;
-      --tan: #E6D5B8;
-      --charcoal: #2E2E2E;
-      --paper: #fffdf8;
-    }
-    * { box-sizing: border-box; }
-    body {
-      margin: 0;
-      font-family: Arial, Helvetica, sans-serif;
-      color: var(--charcoal);
-      background: #f4f1ea;
-    }
-    header {
-      background: var(--walnut);
-      color: white;
-      padding: 18px 24px;
-      border-bottom: 5px solid var(--copper);
-    }
-    header h1 { margin: 0; font-size: 1.55rem; letter-spacing: .04em; }
-    header p { margin: 5px 0 0; opacity: .9; }
-    main {
-      display: grid;
-      grid-template-columns: minmax(300px, 380px) 1fr;
-      gap: 18px;
-      padding: 18px;
-      max-width: 1400px;
-      margin: auto;
-    }
-    .panel {
-      background: var(--paper);
-      border: 1px solid #d4cec2;
-      border-radius: 8px;
-      padding: 18px;
-      box-shadow: 0 2px 8px rgba(0,0,0,.06);
-    }
-    .field {
-      display: grid;
-      grid-template-columns: 1fr 125px;
-      align-items: center;
-      gap: 10px;
-      margin-bottom: 11px;
-    }
-    label { font-weight: 600; font-size: .93rem; }
-    input, select, button {
-      font: inherit;
-      border: 1px solid #aaa;
-      border-radius: 5px;
-      padding: 8px 9px;
-    }
-    input[type=checkbox] { width: auto; }
-    .check {
-      display: flex;
-      gap: 9px;
-      align-items: center;
-      margin: 8px 0;
-    }
-    button {
-      cursor: pointer;
-      font-weight: 700;
-      border: none;
-      background: var(--copper);
-      color: white;
-      padding: 10px 13px;
-    }
-    button.secondary { background: var(--charcoal); }
-    .buttons {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 9px;
-      margin-top: 16px;
-    }
-    .note {
-      font-size: .83rem;
-      line-height: 1.4;
-      background: var(--tan);
-      padding: 10px;
-      border-radius: 5px;
-      margin-top: 14px;
-    }
-    #message {
-      min-height: 22px;
-      margin: 10px 0 0;
-      font-weight: 700;
-    }
-    #message.error { color: #9b1c1c; }
-    #message.ok { color: #27632a; }
-    #previewWrap {
-      overflow: auto;
-      min-height: 720px;
-      background: white;
-      border: 1px solid #ccc;
-      border-radius: 6px;
-    }
-    #preview {
-      display: block;
-      width: 100%;
-      min-width: 500px;
-      min-height: 700px;
-    }
-    .summary {
-      margin-bottom: 12px;
-      display: grid;
-      grid-template-columns: repeat(4, minmax(110px, 1fr));
-      gap: 8px;
-    }
-    .summary div {
-      border-left: 4px solid var(--copper);
-      background: #f7f4ed;
-      padding: 8px 10px;
-    }
-    .summary small { display: block; color: #666; }
-    .summary strong { display: block; margin-top: 3px; }
-    @media (max-width: 850px) {
-      main { grid-template-columns: 1fr; }
-      .summary { grid-template-columns: repeat(2, 1fr); }
-    }
-  </style>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Usonian Fretboard Generator</title>
+<style>
+:root{--walnut:#4B2E15;--copper:#C16E36;--tan:#E6D5B8;--charcoal:#2E2E2E;--paper:#fffdf8}
+*{box-sizing:border-box}
+body{margin:0;font-family:Arial,Helvetica,sans-serif;color:var(--charcoal);background:#f4f1ea}
+header{background:var(--walnut);color:#fff;padding:18px 22px;border-bottom:5px solid var(--copper)}
+header h1{margin:0;font-size:1.45rem}
+header p{margin:6px 0 0}
+main{display:grid;grid-template-columns:minmax(300px,380px) 1fr;gap:18px;max-width:1400px;margin:auto;padding:18px}
+.panel{background:var(--paper);border:1px solid #d4cec2;border-radius:8px;padding:18px}
+.field{display:grid;grid-template-columns:1fr 130px;align-items:center;gap:10px;margin-bottom:12px}
+label{font-weight:700;font-size:.93rem}
+input,select,button{font:inherit;border:1px solid #aaa;border-radius:5px;padding:8px 9px}
+button{border:none;color:#fff;background:var(--copper);cursor:pointer;font-weight:700;padding:11px 14px}
+button.secondary{background:var(--charcoal)}
+.buttons{display:flex;flex-wrap:wrap;gap:9px;margin-top:16px}
+.check{display:flex;gap:8px;align-items:center;margin:9px 0}
+.check input{width:auto}
+#message{min-height:23px;margin-top:11px;font-weight:700}
+#message.ok{color:#27632a}
+#message.error{color:#9b1c1c}
+.note{margin-top:15px;padding:11px;background:var(--tan);border-radius:5px;font-size:.84rem;line-height:1.45}
+.summary{display:grid;grid-template-columns:repeat(4,minmax(100px,1fr));gap:8px;margin-bottom:12px}
+.summary div{background:#f7f4ed;border-left:4px solid var(--copper);padding:8px 10px}
+.summary small{display:block;color:#666}
+.summary strong{display:block;margin-top:3px}
+#previewWrap{min-height:720px;overflow:auto;border:1px solid #ccc;border-radius:6px;background:#fff}
+#preview{display:block;width:100%;min-width:500px;min-height:700px}
+@media(max-width:850px){main{grid-template-columns:1fr}.summary{grid-template-columns:repeat(2,1fr)}}
+</style>
 </head>
 <body>
 <header>
-  <h1>USONIAN FRETBOARD GENERATOR</h1>
-  <p>Create a tapered fretboard outline and equal-tempered fret-slot layout for import into Easel.</p>
+<h1>USONIAN FRETBOARD GENERATOR</h1>
+<p>Create a fretboard outline and true single-line fret slots for Easel.</p>
 </header>
 
 <main>
-  <section class="panel">
-    <div class="field">
-      <label for="units">Units</label>
-      <select id="units">
-        <option value="in">Inches</option>
-        <option value="mm">Millimeters</option>
-      </select>
-    </div>
-    <div class="field">
-      <label for="scale">Scale length</label>
-      <input id="scale" type="number" min="1" step="0.001" value="25.4">
-    </div>
-    <div class="field">
-      <label for="nutWidth">Nut width</label>
-      <input id="nutWidth" type="number" min="0.1" step="0.001" value="1.750">
-    </div>
-    <div class="field">
-      <label for="width14">Width at 14th fret</label>
-      <input id="width14" type="number" min="0.1" step="0.001" value="2.125">
-    </div>
-    <div class="field">
-      <label for="frets">Number of frets</label>
-      <input id="frets" type="number" min="1" max="36" step="1" value="20">
-    </div>
-    <div class="field">
-      <label for="extension">Extension past last fret</label>
-      <input id="extension" type="number" min="0" step="0.001" value="0.250">
-    </div>
-    <div class="field">
-      <label for="slotOverrun">Slot overrun per side</label>
-      <input id="slotOverrun" type="number" min="0" step="0.001" value="0.030">
-    </div>
+<section class="panel">
+<div class="field"><label for="units">Units</label><select id="units"><option value="in">Inches</option><option value="mm">Millimeters</option></select></div>
+<div class="field"><label for="scale">Scale length</label><input id="scale" type="number" min="1" step="0.001" value="25.400"></div>
+<div class="field"><label for="nutWidth">Nut width</label><input id="nutWidth" type="number" min="0.1" step="0.001" value="1.750"></div>
+<div class="field"><label for="width14">Width at 14th fret</label><input id="width14" type="number" min="0.1" step="0.001" value="2.125"></div>
+<div class="field"><label for="frets">Number of frets</label><input id="frets" type="number" min="1" max="36" step="1" value="20"></div>
+<div class="field"><label for="extension">Extension past last fret</label><input id="extension" type="number" min="0" step="0.001" value="0.250"></div>
+<div class="field"><label for="overrun">Fret-line overrun per side</label><input id="overrun" type="number" min="0" step="0.001" value="0.030"></div>
 
-    <div class="check">
-      <input id="centerline" type="checkbox" checked>
-      <label for="centerline">Include centerline</label>
-    </div>
-    <div class="check">
-      <input id="nutline" type="checkbox" checked>
-      <label for="nutline">Include nut line</label>
-    </div>
-    <div class="check">
-      <input id="labels" type="checkbox">
-      <label for="labels">Include fret-number labels</label>
-    </div>
+<div class="check"><input id="centerline" type="checkbox" checked><label for="centerline">Include centerline</label></div>
+<div class="check"><input id="nutline" type="checkbox" checked><label for="nutline">Include nut line</label></div>
 
-    <div class="buttons">
-      <button id="generate">Generate</button>
-      <button id="download" class="secondary">Download SVG</button>
-    </div>
-    <div id="message"></div>
+<div class="buttons">
+<button id="generate">Generate</button>
+<button id="download" class="secondary">Download SVG</button>
+</div>
 
-    <div class="note">
-      The SVG uses separate groups for the perimeter, fret slots, centerline, nut line, and labels.
-      After import into Easel, assign cut depth and tool settings to each group. Fret slots are exported as single open centerlines. The installed CNC bit determines the finished groove width.
-    </div>
-  </section>
+<div id="message"></div>
+<div class="note">Each fret is exported as a single open SVG line. There is no fret-slot width input. The cutter diameter determines the finished groove width in Easel.</div>
+</section>
 
-  <section class="panel">
-    <div class="summary">
-      <div><small>12th fret</small><strong id="s12">—</strong></div>
-      <div><small>14th fret</small><strong id="s14">—</strong></div>
-      <div><small>Board length</small><strong id="sLength">—</strong></div>
-      <div><small>End width</small><strong id="sEndWidth">—</strong></div>
-    </div>
-    <div id="previewWrap">
-      <svg id="preview" xmlns="http://www.w3.org/2000/svg"></svg>
-    </div>
-  </section>
+<section class="panel">
+<div class="summary">
+<div><small>12th fret</small><strong id="s12">—</strong></div>
+<div><small>14th fret</small><strong id="s14">—</strong></div>
+<div><small>Board length</small><strong id="sLength">—</strong></div>
+<div><small>End width</small><strong id="sEndWidth">—</strong></div>
+</div>
+<div id="previewWrap"><svg id="preview" xmlns="http://www.w3.org/2000/svg"></svg></div>
+</section>
 </main>
 
 <script>
 (() => {
-  "use strict";
+"use strict";
 
-  const $ = (id) => document.getElementById(id);
-  const SVG_NS = "http://www.w3.org/2000/svg";
-  let lastSvgText = "";
+const $ = id => document.getElementById(id);
+let lastSvg = "";
 
-  function numeric(id) {
-    return Number($(id).value);
+function factor(){ return $("units").value === "in" ? 25.4 : 1; }
+function val(id){ return Number($(id).value); }
+function fretPos(scale,n){ return scale*(1-Math.pow(2,-n/12)); }
+
+function widthAt(pos,nut,width14,fret14){
+  if(Math.abs(width14-nut)<1e-9) return nut;
+  return nut + (width14-nut)*(pos/fret14);
+}
+
+function display(mm){
+  const inches=$("units").value==="in";
+  const n=inches?mm/25.4:mm;
+  return n.toFixed(inches?4:2)+" "+(inches?"in":"mm");
+}
+
+function params(){
+  const f=factor();
+  const p={
+    scale:val("scale")*f,
+    nut:val("nutWidth")*f,
+    width14:val("width14")*f,
+    frets:Math.round(val("frets")),
+    extension:val("extension")*f,
+    overrun:val("overrun")*f,
+    centerline:$("centerline").checked,
+    nutline:$("nutline").checked
+  };
+
+  if(![p.scale,p.nut,p.width14,p.extension,p.overrun].every(Number.isFinite))
+    throw new Error("All dimensions must be valid numbers.");
+  if(p.scale<=0||p.nut<=0||p.width14<=0)
+    throw new Error("Scale length and widths must be greater than zero.");
+  if(!Number.isInteger(p.frets)||p.frets<1||p.frets>36)
+    throw new Error("Number of frets must be a whole number from 1 to 36.");
+  if(p.width14<p.nut)
+    throw new Error("Width at the 14th fret cannot be less than the nut width.");
+  if(p.extension<0||p.overrun<0)
+    throw new Error("Extension and overrun cannot be negative.");
+
+  return p;
+}
+
+function buildSvg(p){
+  const f14=fretPos(p.scale,14);
+  const last=fretPos(p.scale,p.frets);
+  const length=last+p.extension;
+  const endWidth=widthAt(length,p.nut,p.width14,f14);
+
+  const margin=Math.max(12,endWidth*.3);
+  const vw=endWidth+margin*2;
+  const vh=length+margin*2;
+  const cx=vw/2;
+  const y0=margin;
+  const y1=y0+length;
+
+  const nl=cx-p.nut/2, nr=cx+p.nut/2;
+  const el=cx-endWidth/2, er=cx+endWidth/2;
+
+  let frets="";
+  for(let n=1;n<=p.frets;n++){
+    const pos=fretPos(p.scale,n);
+    const y=y0+pos;
+    const w=widthAt(pos,p.nut,p.width14,f14)+p.overrun*2;
+    const x1=cx-w/2, x2=cx+w/2;
+    frets += `<line id="FRET_${n}" x1="${x1.toFixed(4)}" y1="${y.toFixed(4)}" x2="${x2.toFixed(4)}" y2="${y.toFixed(4)}"/>\n`;
   }
 
-  function factorToMm() {
-    return $("units").value === "in" ? 25.4 : 1;
-  }
+  const center=p.centerline
+    ? `<line id="CENTERLINE" x1="${cx.toFixed(4)}" y1="${y0.toFixed(4)}" x2="${cx.toFixed(4)}" y2="${y1.toFixed(4)}"/>`
+    : "";
 
-  function displayValue(mm) {
-    const inches = $("units").value === "in";
-    const value = inches ? mm / 25.4 : mm;
-    return `${value.toFixed(inches ? 4 : 2)} ${inches ? "in" : "mm"}`;
-  }
+  const nutline=p.nutline
+    ? `<line id="NUT_LINE" x1="${nl.toFixed(4)}" y1="${y0.toFixed(4)}" x2="${nr.toFixed(4)}" y2="${y0.toFixed(4)}"/>`
+    : "";
 
-  function fretPosition(scale, fret) {
-    return scale * (1 - Math.pow(2, -fret / 12));
-  }
-
-  function widthAt(position, nutWidth, width14, fret14Pos) {
-    return nutWidth + (width14 - nutWidth) * (position / fret14Pos);
-  }
-
-  function validate(p) {
-    if (![p.scale, p.nutWidth, p.width14, p.extension, p.slotOverrun].every(Number.isFinite)) {
-      throw new Error("All dimensions must be valid numbers.");
-    }
-    if (!Number.isInteger(p.frets) || p.frets < 1 || p.frets > 36) {
-      throw new Error("Number of frets must be a whole number from 1 to 36.");
-    }
-    if (p.scale <= 0 || p.nutWidth <= 0 || p.width14 <= 0) {
-      throw new Error("Scale length and widths must be greater than zero.");
-    }
-    if (p.width14 < p.nutWidth) {
-      throw new Error("Width at the 14th fret cannot be less than the nut width.");
-    }
-    if (p.extension < 0 || p.slotOverrun < 0) {
-      throw new Error("Extension and slot overrun cannot be negative.");
-    }
-  }
-
-  function getParams() {
-    const f = factorToMm();
-    const p = {
-      units: $("units").value,
-      scale: numeric("scale") * f,
-      nutWidth: numeric("nutWidth") * f,
-      width14: numeric("width14") * f,
-      frets: Math.round(numeric("frets")),
-      extension: numeric("extension") * f,
-      slotOverrun: numeric("slotOverrun") * f,
-      centerline: $("centerline").checked,
-      nutline: $("nutline").checked,
-      labels: $("labels").checked
-    };
-    validate(p);
-    return p;
-  }
-
-  function slotLinePath(cx, cy, width) {
-    const x1 = cx - width / 2;
-    const x2 = cx + width / 2;
-    return `M ${x1.toFixed(4)} ${cy.toFixed(4)} L ${x2.toFixed(4)} ${cy.toFixed(4)}`;
-  }
-
-  function makeSvg(p) {
-    const fret14 = fretPosition(p.scale, 14);
-    const lastFret = fretPosition(p.scale, p.frets);
-    const boardLength = lastFret + p.extension;
-    const endWidth = widthAt(boardLength, p.nutWidth, p.width14, fret14);
-    const margin = Math.max(12, endWidth * 0.35);
-    const labelMargin = p.labels ? 12 : 0;
-    const viewWidth = endWidth + margin * 2 + labelMargin;
-    const viewHeight = boardLength + margin * 2;
-
-    const xCenter = viewWidth / 2;
-    const yNut = margin;
-    const xNutLeft = xCenter - p.nutWidth / 2;
-    const xNutRight = xCenter + p.nutWidth / 2;
-    const xEndLeft = xCenter - endWidth / 2;
-    const xEndRight = xCenter + endWidth / 2;
-    const yEnd = yNut + boardLength;
-
-    const perimeter = `M ${xNutLeft.toFixed(4)} ${yNut.toFixed(4)} ` +
-                      `L ${xNutRight.toFixed(4)} ${yNut.toFixed(4)} ` +
-                      `L ${xEndRight.toFixed(4)} ${yEnd.toFixed(4)} ` +
-                      `L ${xEndLeft.toFixed(4)} ${yEnd.toFixed(4)} Z`;
-
-    const slotPaths = [];
-    const labelNodes = [];
-
-    for (let n = 1; n <= p.frets; n++) {
-      const d = fretPosition(p.scale, n);
-      const w = widthAt(d, p.nutWidth, p.width14, fret14) + p.slotOverrun * 2;
-      const y = yNut + d;
-      slotPaths.push(`<path d="${slotLinePath(xCenter, y, w)}" />`);
-      if (p.labels) {
-        const labelX = xCenter + w / 2 + 4;
-        labelNodes.push(`<text x="${labelX.toFixed(4)}" y="${(y + 1.5).toFixed(4)}">${n}</text>`);
-      }
-    }
-
-    const centerline = p.centerline
-      ? `<g id="CENTERLINE" fill="none" stroke="#0080ff" stroke-width="0.20">
-           <path d="M ${xCenter.toFixed(4)} ${yNut.toFixed(4)} L ${xCenter.toFixed(4)} ${yEnd.toFixed(4)}" />
-         </g>` : "";
-
-    const nutline = p.nutline
-      ? `<g id="NUT_LINE" fill="none" stroke="#00a040" stroke-width="0.20">
-           <path d="M ${xNutLeft.toFixed(4)} ${yNut.toFixed(4)} L ${xNutRight.toFixed(4)} ${yNut.toFixed(4)}" />
-         </g>` : "";
-
-    const labels = p.labels
-      ? `<g id="FRET_LABELS" font-family="Arial, sans-serif" font-size="4" fill="#555">${labelNodes.join("")}</g>`
-      : "";
-
-    const metadata = {
-      generator: "Usonian Fretboard Generator",
-      version: "1.1",
-      scaleLengthMm: p.scale,
-      nutWidthMm: p.nutWidth,
-      widthAt14Mm: p.width14,
-      numberOfFrets: p.frets,
-      extensionMm: p.extension,
-      boardLengthMm: boardLength,
-      endWidthMm: endWidth
-    };
-
-    const svg = `<?xml version="1.0" encoding="UTF-8"?>
-<svg xmlns="${SVG_NS}" width="${viewWidth.toFixed(4)}mm" height="${viewHeight.toFixed(4)}mm"
-     viewBox="0 0 ${viewWidth.toFixed(4)} ${viewHeight.toFixed(4)}">
-  <title>Usonian Guitar Fretboard</title>
-  <desc>${JSON.stringify(metadata)}</desc>
-  <g id="FRETBOARD_PERIMETER" fill="none" stroke="#000000" stroke-width="0.25">
-    <path d="${perimeter}" />
+  const svg=`<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" width="${vw.toFixed(4)}mm" height="${vh.toFixed(4)}mm" viewBox="0 0 ${vw.toFixed(4)} ${vh.toFixed(4)}">
+  <g id="FRETBOARD_OUTLINE" fill="none" stroke="#000000" stroke-width="0.01">
+    <path d="M ${nl.toFixed(4)} ${y0.toFixed(4)} L ${nr.toFixed(4)} ${y0.toFixed(4)} L ${er.toFixed(4)} ${y1.toFixed(4)} L ${el.toFixed(4)} ${y1.toFixed(4)} Z"/>
   </g>
-  <g id="FRET_SLOTS" fill="none" stroke="#000000" stroke-width="0.20" stroke-linecap="butt">
-    ${slotPaths.join("\n    ")}
+  <g id="FRET_LINES" fill="none" stroke="#000000" stroke-width="0.01" stroke-linecap="butt">
+    ${frets}
   </g>
-  ${centerline}
-  ${nutline}
-  ${labels}
+  <g id="GUIDES" fill="none" stroke="#000000" stroke-width="0.01">
+    ${center}
+    ${nutline}
+  </g>
 </svg>`;
 
-    return { svg, fret14, boardLength, endWidth };
+  return {svg,f14,length,endWidth};
+}
+
+function render(){
+  const msg=$("message");
+  try{
+    const p=params();
+    const r=buildSvg(p);
+    lastSvg=r.svg;
+
+    const parsed=new DOMParser().parseFromString(r.svg,"image/svg+xml");
+    const node=document.importNode(parsed.documentElement,true);
+    node.removeAttribute("width");
+    node.removeAttribute("height");
+    node.setAttribute("preserveAspectRatio","xMidYMid meet");
+
+    $("preview").replaceWith(node);
+    node.id="preview";
+
+    $("s12").textContent=display(fretPos(p.scale,12));
+    $("s14").textContent=display(r.f14);
+    $("sLength").textContent=display(r.length);
+    $("sEndWidth").textContent=display(r.endWidth);
+
+    msg.className="ok";
+    msg.textContent="Fretboard generated.";
+  }catch(e){
+    msg.className="error";
+    msg.textContent=e.message;
   }
+}
 
-  function render() {
-    const message = $("message");
-    try {
-      const p = getParams();
-      const result = makeSvg(p);
-      lastSvgText = result.svg;
+function download(){
+  if(!lastSvg) render();
+  if(!lastSvg) return;
 
-      const parser = new DOMParser();
-      const doc = parser.parseFromString(result.svg, "image/svg+xml");
-      const imported = document.importNode(doc.documentElement, true);
-      imported.removeAttribute("width");
-      imported.removeAttribute("height");
-      imported.setAttribute("preserveAspectRatio", "xMidYMid meet");
+  const blob=new Blob([lastSvg],{type:"image/svg+xml;charset=utf-8"});
+  const url=URL.createObjectURL(blob);
+  const a=document.createElement("a");
+  a.href=url;
+  a.download=`Usonian_Fretboard_${$("scale").value}_${$("frets").value}frets.svg`;
+  document.body.appendChild(a);
+  a.click();
+  a.remove();
+  setTimeout(()=>URL.revokeObjectURL(url),1000);
+}
 
-      const preview = $("preview");
-      preview.replaceWith(imported);
-      imported.id = "preview";
+$("generate").addEventListener("click",render);
+$("download").addEventListener("click",download);
 
-      $("s12").textContent = displayValue(fretPosition(p.scale, 12));
-      $("s14").textContent = displayValue(result.fret14);
-      $("sLength").textContent = displayValue(result.boardLength);
-      $("sEndWidth").textContent = displayValue(result.endWidth);
-
-      message.className = "ok";
-      message.textContent = "Fretboard generated.";
-    } catch (err) {
-      message.className = "error";
-      message.textContent = err.message;
-    }
-  }
-
-  function downloadSvg() {
-    if (!lastSvgText) render();
-    if (!lastSvgText) return;
-    const blob = new Blob([lastSvgText], { type: "image/svg+xml;charset=utf-8" });
-    const url = URL.createObjectURL(blob);
-    const a = document.createElement("a");
-    const scale = $("scale").value.replace(".", "_");
-    a.href = url;
-    a.download = `Usonian_Fretboard_${scale}_${$("frets").value}frets.svg`;
-    document.body.appendChild(a);
-    a.click();
-    a.remove();
-    setTimeout(() => URL.revokeObjectURL(url), 1000);
-  }
-
-  $("generate").addEventListener("click", render);
-  $("download").addEventListener("click", downloadSvg);
-  $("units").addEventListener("change", () => {
-    const current = $("units").value;
-    const toInches = current === "in";
-    const ids = ["scale", "nutWidth", "width14", "extension", "slotOverrun"];
-    ids.forEach(id => {
-      const el = $(id);
-      const val = Number(el.value);
-      if (!Number.isFinite(val)) return;
-      el.value = (toInches ? val / 25.4 : val * 25.4).toFixed(toInches ? 4 : 2);
-    });
-    render();
+$("units").addEventListener("change",()=>{
+  const toInches=$("units").value==="in";
+  ["scale","nutWidth","width14","extension","overrun"].forEach(id=>{
+    const el=$(id);
+    const n=Number(el.value);
+    if(!Number.isFinite(n)) return;
+    el.value=(toInches?n/25.4:n*25.4).toFixed(toInches?4:2);
   });
-
   render();
+});
+
+render();
 })();
 </script>
 </body>
