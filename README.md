@@ -1,13 +1,16 @@
-# Usonian Fretboard Generator v4.0.0
+# Usonian Fretboard Generator v4.1.0
 
-New in v4.0.0:
-- Save named fretboards in the browser.
-- Load them later to continue editing.
-- Rename, duplicate, and delete saved fretboards.
-- Saved designs include all current geometry and option settings.
-- Separate Easel SVG exports for fret slots and continuous outline.
-- Visible version number in title, header, footer, README, ZIP filename, and SVG metadata.
+New in v4.1.0
+- Added an Export filename field.
+- Saved fretboard/project name becomes the default export filename.
+- Fret Slots, Outline, and Combined exports receive descriptive suffixes.
+- On supported desktop browsers, export uses a true Save As dialog so you can choose the folder and filename.
+- On Safari/iPhone and browsers without the File System Access API, the app supplies the chosen filename to the normal browser/iOS download workflow.
 
-Saved fretboards use browser localStorage. They persist on the same browser/device but do not automatically sync across devices.
+Existing v4.0.0 features remain:
+- Named saved fretboards using browser local storage.
+- Load, rename, duplicate, and delete saved fretboards.
+- Separate Easel exports for open fret-slot lines and one continuous closed outline.
+- Visible version information.
 
-Upload `index.html` to the root of the existing GitHub Pages repository to update the site.
+Replace the repository's existing `index.html` with this one.
