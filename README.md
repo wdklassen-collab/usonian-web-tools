@@ -1,16 +1,18 @@
-# Usonian Fretboard Generator v4.1.0
+# Usonian Web Tools
 
-New in v4.1.0
-- Added an Export filename field.
-- Saved fretboard/project name becomes the default export filename.
-- Fret Slots, Outline, and Combined exports receive descriptive suffixes.
-- On supported desktop browsers, export uses a true Save As dialog so you can choose the folder and filename.
-- On Safari/iPhone and browsers without the File System Access API, the app supplies the chosen filename to the normal browser/iOS download workflow.
+Browser-based tools for guitar building and CNC work.
 
-Existing v4.0.0 features remain:
-- Named saved fretboards using browser local storage.
-- Load, rename, duplicate, and delete saved fretboards.
-- Separate Easel exports for open fret-slot lines and one continuous closed outline.
-- Visible version information.
+## Tools
 
-Replace the repository's existing `index.html` with this one.
+- **Fretboard Generator v4.1.0** — custom fretboard layout with saved designs and Easel-compatible SVG exports.
+- **Radius Dish Creator v0.2.2** — 3D preview plus STL and Easel-compatible G-code exports.
+
+## GitHub Pages
+
+The repository is organized for GitHub Pages:
+
+- Home: `/`
+- Fretboard Generator: `/fretboard/`
+- Radius Dish Creator: `/radius-dish/`
+
+All processing and file generation runs in the browser. No server is required.
