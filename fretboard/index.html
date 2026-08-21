@@ -70,10 +70,11 @@ Print at <strong>100% / Actual Size</strong>. Do not use “Fit to Page.” The 
 </section>
 <section class="panel"><div class="summary"><div><small>12th fret</small><strong id="s12">—</strong></div><div><small>14th fret</small><strong id="s14">—</strong></div><div><small>Board length</small><strong id="sLength">—</strong></div><div><small>End width</small><strong id="sEndWidth">—</strong></div></div><div id="previewWrap"><svg id="preview" xmlns="http://www.w3.org/2000/svg"></svg></div></section>
 </main>
+<div id="printArea" aria-hidden="true"></div>
 <footer>Usonian Guitar Co. • Fretboard Generator • Version 4.2.0 • Last Updated 2026-08-07</footer>
 <script>
 (()=>{"use strict";
-const VERSION="4.0.0", STORAGE_KEY="usonian-fretboard-projects-v1", $=id=>document.getElementById(id);let files={slots:"",outline:"",combined:""};
+const VERSION="4.2.0", STORAGE_KEY="usonian-fretboard-projects-v1", $=id=>document.getElementById(id);let files={slots:"",outline:"",combined:""};
 const factor=()=>$("units").value==="in"?25.4:1;const num=id=>Number($(id).value);const fretPos=(s,n)=>s*(1-Math.pow(2,-n/12));
 function widthAt(pos,nut,w14,f14){return Math.abs(w14-nut)<1e-9?nut:nut+(w14-nut)*(pos/f14)}
 function shown(mm){const inch=$("units").value==="in",v=inch?mm/25.4:mm;return v.toFixed(inch?4:2)+" "+(inch?"in":"mm")}
@@ -251,7 +252,7 @@ function printTemplate(){
 
   $("message").className="ok";
   $("message").textContent=`Prepared ${pages} print page${pages===1?"":"s"}. In the print dialog choose 100% / Actual Size.`;
-  setTimeout(()=>window.print(),50);
+  window.print();
 }
 
 $("generate").onclick=render;
