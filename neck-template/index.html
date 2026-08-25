@@ -1,0 +1,122 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Usonian Neck Template Generator v1.0.0</title>
+<style>
+:root{--walnut:#4b2e15;--copper:#c16e36;--paper:#fffdf8;--ink:#2e2e2e;--muted:#6d675f;--tan:#e6d5b8;--green:#2e6b3f;--red:#9b1c1c}
+*{box-sizing:border-box}body{margin:0;background:#f4f1ea;color:var(--ink);font-family:Arial,Helvetica,sans-serif}header{background:var(--walnut);color:#fff;border-bottom:5px solid var(--copper);padding:18px 22px}header h1{font-size:1.45rem;margin:0}header p{margin:6px 0 0;color:#f1e7d8}main{display:grid;grid-template-columns:minmax(350px,440px) 1fr;gap:18px;max-width:1500px;margin:auto;padding:18px}.panel{background:var(--paper);border:1px solid #d4cec2;border-radius:9px;padding:18px;box-shadow:0 2px 8px rgba(0,0,0,.05)}h2{font-size:1rem;color:var(--walnut);border-bottom:1px solid #ddd;margin:5px 0 13px;padding-bottom:7px}.field{display:grid;grid-template-columns:1fr 155px;gap:10px;align-items:start;margin-bottom:11px}.field label,.check label{font-size:.92rem;font-weight:700;padding-top:8px}.field input,.field select,button{font:inherit;border:1px solid #aaa;border-radius:5px;padding:8px 9px}.field small{grid-column:2;color:var(--muted);font-size:.74rem;margin-top:-6px;min-height:1em}.check{display:flex;gap:8px;align-items:center;margin:10px 0}.check input{width:auto}.check label{padding:0}.buttons{display:grid;grid-template-columns:repeat(2,1fr);gap:8px;margin-top:10px}.buttons.three{grid-template-columns:repeat(3,1fr)}button{border:0;background:var(--copper);color:#fff;font-weight:700;cursor:pointer}button:hover{filter:brightness(.92)}button.secondary{background:var(--ink)}button.green{background:var(--green)}button.light{background:#777}.note{background:var(--tan);border-radius:6px;padding:11px;margin-top:13px;font-size:.83rem;line-height:1.45}.summary{display:grid;grid-template-columns:repeat(4,minmax(120px,1fr));gap:8px;margin-bottom:12px}.summary div{background:#f7f4ed;border-left:4px solid var(--copper);padding:8px 10px}.summary small{display:block;color:#666}.summary strong{display:block;margin-top:3px}.preview-wrap{overflow:auto;min-height:710px;border:1px solid #ccc;border-radius:7px;background:#fff}.preview-wrap svg{display:block;width:100%;min-width:700px;min-height:680px}.legend{display:flex;flex-wrap:wrap;gap:15px;margin:12px 0 0;color:var(--muted);font-size:.82rem}.swatch{display:inline-block;width:18px;height:8px;margin-right:5px;border:1px solid #777}.neck{background:#d9b37a}.board{background:#6d4528}.nut{background:#eee}.datum{background:#3273b9}.status{min-height:22px;margin-top:9px;font-size:.9rem;font-weight:700}.ok{color:var(--green)}.error{color:var(--red)}footer{text-align:center;color:#777;font-size:.86rem;padding:0 18px 25px}@media(max-width:980px){main{grid-template-columns:1fr}.summary{grid-template-columns:repeat(2,1fr)}}@media(max-width:520px){.field{grid-template-columns:1fr}.field small{grid-column:1}.buttons,.buttons.three{grid-template-columns:1fr}}
+@media print{body>header,body>main,body>footer{display:none!important}#printArea{display:block!important}html,body{margin:0!important;background:#fff}.print-sheet{page-break-after:always;break-after:page;position:relative;overflow:hidden}.print-sheet:last-child{page-break-after:auto;break-after:auto}.print-sheet svg{display:block}}#printArea{display:none}
+</style>
+</head>
+<body>
+<header><h1>USONIAN GUITAR CO. — NECK TEMPLATE GENERATOR</h1><p><strong>Version 1.0.0</strong> · Side profile · Bolt-on neck</p></header>
+<main>
+<section class="panel" aria-label="Neck inputs">
+<h2>Units and scale</h2>
+<div class="field"><label for="units">Display units</label><select id="units"><option value="in">Inches</option><option value="mm">Millimeters</option></select><small>Unmarked entries use this unit.</small></div>
+<div class="field"><label for="scale">Scale length</label><input id="scale" value="25.43"><small data-for="scale"></small></div>
+<div class="field"><label for="jointFret">Body joint</label><select id="jointFret"><option value="14">14-fret neck</option><option value="12">12-fret neck</option></select></div>
+<div class="field"><label for="nutThickness">Nut thickness</label><input id="nutThickness" value="1/4"><small data-for="nutThickness"></small></div>
+<div class="field"><label for="frets">Number of frets</label><input id="frets" type="number" min="12" max="36" step="1" value="20"></div>
+<div class="field"><label for="fretboardOverrun">Overrun after last fret</label><input id="fretboardOverrun" value="1/4"><small data-for="fretboardOverrun"></small></div>
+
+<h2>Fretboard and neck</h2>
+<div class="check"><input id="includeFretboard" type="checkbox" checked><label for="includeFretboard">Include fretboard in template</label></div>
+<div class="field"><label for="fretboardThickness">Fretboard thickness</label><input id="fretboardThickness" value="6 mm"><small data-for="fretboardThickness"></small></div>
+<div class="field"><label for="firstThickness">Finished thickness at 1st fret</label><input id="firstThickness" value="0.878"><small data-for="firstThickness"></small></div>
+<div class="field"><label for="tenthThickness">Finished thickness at 10th fret</label><input id="tenthThickness" value="1.064"><small data-for="tenthThickness"></small></div>
+<div class="check"><input id="thicknessIncludesBoard" type="checkbox" checked><label for="thicknessIncludesBoard">Thickness measurements include fretboard</label></div>
+
+<h2>Headstock</h2>
+<div class="field"><label for="headstockLength">Headstock length</label><input id="headstockLength" value="6+1/2"><small data-for="headstockLength"></small></div>
+<div class="field"><label for="headstockAngle">Back angle</label><input id="headstockAngle" type="number" min="0" max="30" step="0.1" value="15"><small>Degrees from the neck plane.</small></div>
+<div class="field"><label for="headstockThickness">Headstock thickness</label><input id="headstockThickness" value="1/2"><small data-for="headstockThickness"></small></div>
+
+<h2>Heel</h2>
+<div class="field"><label for="bodyDepth">Body depth at heel</label><input id="bodyDepth" value="3.045"><small data-for="bodyDepth"></small></div>
+<div class="field"><label for="heelFoot">Heel-foot length</label><input id="heelFoot" value="1"><small data-for="heelFoot"></small></div>
+<div class="field"><label for="heelCap">Heel-cap thickness</label><input id="heelCap" value="1/8"><small data-for="heelCap"></small></div>
+<div class="check"><input id="autoRadius" type="checkbox" checked><label for="autoRadius">Calculate maximum heel radius</label></div>
+<div class="field"><label for="heelRadius">Heel radius</label><input id="heelRadius" value="1+3/4" disabled><small data-for="heelRadius"></small></div>
+
+<h2>Template options</h2>
+<div class="check"><input id="showFrets" type="checkbox" checked><label for="showFrets">Show fret reference lines</label></div>
+<div class="check"><input id="showDimensions" type="checkbox" checked><label for="showDimensions">Show dimension labels</label></div>
+<div class="field"><label for="exportName">Export filename</label><input id="exportName" value="Usonian Neck Template"></div>
+<div class="buttons"><button id="generate">Generate</button><button id="download" class="secondary">Download SVG</button></div>
+<div class="buttons"><button id="print" class="green">Print 1:1 Template</button><button id="reset" class="light">Reset Defaults</button></div>
+<div id="message" class="status" role="status"></div>
+<div class="note"><strong>Flexible measurements:</strong> enter decimal inches, fractions such as <code>3/4</code>, mixed values such as <code>1 1/2</code>, <code>1-1/2</code>, or <code>1+1/2</code>, explicit inches such as <code>1.5 in</code>, or millimeters such as <code>38.1 mm</code>.</div>
+<div class="note"><strong>Print:</strong> choose Landscape and print at <strong>100% / Actual Size</strong>. Do not use “Fit to Page.” Pages include one-inch calibration marks and overlapping alignment crosses.</div>
+</section>
+
+<section class="panel">
+<div class="summary"><div><small>Joint position</small><strong id="sJoint">—</strong></div><div><small>Neck-plane length</small><strong id="sPlane">—</strong></div><div><small>Heel radius</small><strong id="sRadius">—</strong></div><div><small>Overall length</small><strong id="sOverall">—</strong></div></div>
+<div class="preview-wrap"><svg id="preview" xmlns="http://www.w3.org/2000/svg" aria-label="Neck side-profile preview"></svg></div>
+<div class="legend"><span><i class="swatch neck"></i>Neck wood</span><span><i class="swatch board"></i>Fretboard</span><span><i class="swatch nut"></i>Nut</span><span><i class="swatch datum"></i>Reference geometry</span></div>
+</section>
+</main>
+<div id="printArea" aria-hidden="true"></div>
+<footer>Usonian Guitar Co. · Neck Template Generator · Version 1.0.0</footer>
+<script>
+(()=>{"use strict";
+const VERSION="1.0.0",$=id=>document.getElementById(id),DIM_IDS=["scale","nutThickness","fretboardOverrun","fretboardThickness","firstThickness","tenthThickness","headstockLength","headstockThickness","bodyDepth","heelFoot","heelCap","heelRadius"];
+const defaults={units:"in",scale:"25.43",jointFret:"14",nutThickness:"1/4",frets:"20",fretboardOverrun:"1/4",includeFretboard:true,fretboardThickness:"6 mm",firstThickness:"0.878",tenthThickness:"1.064",thicknessIncludesBoard:true,headstockLength:"6+1/2",headstockAngle:"15",headstockThickness:"1/2",bodyDepth:"3.045",heelFoot:"1",heelCap:"1/8",autoRadius:true,heelRadius:"1+3/4",showFrets:true,showDimensions:true,exportName:"Usonian Neck Template"};
+let currentSvg="",currentGeometry=null;
+function parseMeasurement(raw,defaultUnit){
+  let s=String(raw??"").trim().toLowerCase().replace(/[″”]/g,'"').replace(/[′’]/g,"'");
+  if(!s)throw Error("Enter a measurement in every dimension field.");
+  let unit=defaultUnit;if(/\bmm\b/.test(s))unit="mm";else if(/\b(?:in|inch|inches)\b|\"/.test(s))unit="in";
+  s=s.replace(/\b(?:mm|millimeters?|in|inches?)\b|[\"']/g,"").trim();
+  if(!/^[0-9.\s+\-/]+$/.test(s))throw Error(`Invalid measurement “${raw}”.`);
+  let value;
+  const mixed=s.match(/^([+-]?\d+(?:\.\d+)?)\s*(?:\+|-|\s)\s*(\d+)\s*\/\s*(\d+)$/);
+  const fraction=s.match(/^([+-]?\d+)\s*\/\s*(\d+)$/);
+  if(mixed){const whole=Number(mixed[1]),den=Number(mixed[3]);if(!den)throw Error("A fraction cannot have a zero denominator.");value=whole+(whole<0?-1:1)*Number(mixed[2])/den}
+  else if(fraction){const den=Number(fraction[2]);if(!den)throw Error("A fraction cannot have a zero denominator.");value=Number(fraction[1])/den}
+  else if(/^[+-]?\d+(?:\.\d+)?$/.test(s))value=Number(s);
+  else throw Error(`Could not understand “${raw}”. Try 1+1/2, 1.5, or 38.1 mm.`);
+  if(!Number.isFinite(value))throw Error(`Invalid measurement “${raw}”.`);return unit==="in"?value*25.4:value;
+}
+const fretPos=(scale,n)=>scale*(1-Math.pow(2,-n/12));
+function shown(mm,precision){const inches=$("units").value==="in",v=inches?mm/25.4:mm;return v.toFixed(precision??(inches?3:2))+" "+(inches?"in":"mm")}
+function pDim(id){try{return parseMeasurement($(id).value,$("units").value)}catch(e){throw Error(`${$(id).previousElementSibling?.textContent||id}: ${e.message}`)}}
+function parameters(){
+  const p={scale:pDim("scale"),jointFret:Number($("jointFret").value),nut:pDim("nutThickness"),frets:Number($("frets").value),overrun:pDim("fretboardOverrun"),includeBoard:$("includeFretboard").checked,board:pDim("fretboardThickness"),t1:pDim("firstThickness"),t10:pDim("tenthThickness"),includesBoard:$("thicknessIncludesBoard").checked,headLength:pDim("headstockLength"),headAngle:Number($("headstockAngle").value),headThickness:pDim("headstockThickness"),bodyDepth:pDim("bodyDepth"),heelFoot:pDim("heelFoot"),heelCap:pDim("heelCap"),autoRadius:$("autoRadius").checked,radius:pDim("heelRadius"),showFrets:$("showFrets").checked,showDimensions:$("showDimensions").checked};
+  if(!Number.isInteger(p.frets)||p.frets<12||p.frets>36)throw Error("Number of frets must be 12–36.");if(p.frets<p.jointFret)throw Error("The fretboard must reach the selected body-joint fret.");if(!Number.isFinite(p.headAngle)||p.headAngle<0||p.headAngle>30)throw Error("Headstock angle must be 0–30 degrees.");
+  for(const [k,v] of Object.entries(p))if(typeof v==="number"&&k!=="headAngle"&&k!=="frets"&&k!=="jointFret"&&v<=0)throw Error("All dimensions must be greater than zero.");
+  const boardContribution=p.includesBoard?p.board:0;if(p.t1<=boardContribution||p.t10<=boardContribution)throw Error("Finished neck thickness must be greater than the included fretboard thickness.");if(p.bodyDepth<=p.heelCap+p.t10)throw Error("Body depth must exceed the neck thickness plus heel cap.");return p;
+}
+function geometry(p){
+  const joint=fretPos(p.scale,p.jointFret),last=fretPos(p.scale,p.frets),boardEnd=last+p.overrun,plane=joint+p.nut,x1=fretPos(p.scale,1),x10=fretPos(p.scale,10),boardOffset=p.includesBoard?p.board:0;
+  const woodDepthAt=x=>{const finished=x<=x10?p.t1+(p.t10-p.t1)*(x-x1)/(x10-x1):p.t10;return finished-boardOffset};
+  const d0=Math.max(1,woodDepthAt(0)),d1=Math.max(1,woodDepthAt(x1)),d10=woodDepthAt(x10),dj=woodDepthAt(joint),heelBottom=p.bodyDepth-p.heelCap,autoRadius=heelBottom-dj;
+  if(autoRadius<=0)throw Error("There is no room for a heel curve with these dimensions.");const radius=p.autoRadius?autoRadius:p.radius;if(radius>autoRadius+.01)throw Error(`Heel radius cannot exceed ${shown(autoRadius)} with the current body depth and neck thickness.`);
+  const heelArcEndX=joint-p.heelFoot,arcStartX=heelArcEndX-radius,arcStartY=woodDepthAt(Math.max(0,arcStartX)),arcEndY=arcStartY+radius;if(arcStartX<0)throw Error("Heel radius and heel-foot length extend past the nut. Reduce one of them.");if(arcEndY>heelBottom+.05)throw Error("The selected heel radius extends below the heel cap.");
+  const a=p.headAngle*Math.PI/180,breakX=-p.nut,topBreakY=0,topTipX=breakX-p.headLength*Math.cos(a),topTipY=p.headLength*Math.sin(a),nx=Math.sin(a),ny=Math.cos(a),bottomTipX=topTipX+nx*p.headThickness,bottomTipY=topTipY+ny*p.headThickness,bottomBreakX=breakX+nx*p.headThickness,bottomBreakY=ny*p.headThickness;
+  const neckPath=[`M ${breakX} 0`,`L 0 0`,`L 0 ${d0}`,`L ${x1} ${d1}`,`L ${x10} ${d10}`,`L ${arcStartX} ${arcStartY}`,`A ${radius} ${radius} 0 0 1 ${heelArcEndX} ${arcEndY}`,`L ${heelArcEndX} ${heelBottom}`,`L ${joint} ${heelBottom}`,`L ${joint} 0`,`Z`].join(" ");
+  const headPath=[`M ${breakX} ${topBreakY}`,`L ${topTipX} ${topTipY}`,`L ${bottomTipX} ${bottomTipY}`,`L ${bottomBreakX} ${bottomBreakY}`,`L ${breakX} ${Math.max(d0,bottomBreakY)}`,`Z`].join(" ");
+  const xs=[topTipX,bottomTipX,breakX,boardEnd,joint],ys=[0,topTipY,bottomTipY,bottomBreakY,p.bodyDepth];return{...p,joint,last,boardEnd,plane,d0,d1,d10,dj,heelBottom,autoRadius,radius,heelArcEndX,arcStartX,arcStartY,arcEndY,neckPath,headPath,breakX,topTipX,topTipY,bottomTipX,bottomTipY,bottomBreakX,bottomBreakY,minX:Math.min(...xs),maxX:Math.max(...xs),minY:Math.min(...ys),maxY:Math.max(...ys)};
+}
+const esc=s=>String(s).replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&apos;"}[c]));
+function svgFor(g,preview=false){
+  const margin=preview?28:12,minX=g.minX-margin,minY=g.minY-margin,maxX=g.maxX+margin,maxY=g.maxY+margin,w=maxX-minX,h=maxY-minY,sw=preview?0.7:0.25;
+  let frets="";if(g.showFrets)for(let n=1;n<=g.frets;n++){const x=fretPos(g.scale,n);frets+=`<line x1="${x}" y1="${g.includeBoard?-g.board:0}" x2="${x}" y2="${g.includeBoard?0:Math.min(g.d10,7)}" class="ref"/>`;if(preview&&(n===1||n===10||n===g.jointFret||n===g.frets))frets+=`<text x="${x}" y="${g.includeBoard?-g.board-3:-3}" text-anchor="middle" class="label">${n}</text>`}
+  const board=g.includeBoard?`<path d="M 0 0 L ${g.boardEnd} 0 L ${g.boardEnd} ${-g.board} L 0 ${-g.board} Z" class="board"/>`:"";
+  const nut=`<path d="M ${g.breakX} ${-g.board} L 0 ${-g.board} L 0 0 L ${g.breakX} 0 Z" class="nut"/>`;
+  let dims="";if(g.showDimensions){const y=-g.board-12;dims=`<g class="dimensions"><line x1="${g.breakX}" y1="${y}" x2="${g.joint}" y2="${y}"/><line x1="${g.breakX}" y1="${y-3}" x2="${g.breakX}" y2="${y+3}"/><line x1="${g.joint}" y1="${y-3}" x2="${g.joint}" y2="${y+3}"/><text x="${(g.breakX+g.joint)/2}" y="${y-2}" text-anchor="middle">Neck plane ${esc(shown(g.plane))}</text><text x="${g.arcStartX+g.radius*.45}" y="${g.arcStartY+g.radius*.55}">R ${esc(shown(g.radius))}</text><text x="${g.joint+3}" y="${g.bodyDepth/2}">Heel ${esc(shown(g.bodyDepth))}</text></g>`}
+  return `<svg xmlns="http://www.w3.org/2000/svg" width="${w.toFixed(3)}mm" height="${h.toFixed(3)}mm" viewBox="${minX.toFixed(3)} ${minY.toFixed(3)} ${w.toFixed(3)} ${h.toFixed(3)}" preserveAspectRatio="xMidYMid meet"><title>Usonian Neck Template</title><desc>Side-profile bolt-on guitar neck template generated by Usonian Neck Template Generator v${VERSION}</desc><style>.neck{fill:#d9b37a;stroke:#111;stroke-width:${sw}}.head{fill:#d9b37a;stroke:#111;stroke-width:${sw}}.board{fill:#6d4528;stroke:#111;stroke-width:${sw}}.nut{fill:#eee;stroke:#111;stroke-width:${sw}}.cap{fill:#7d5a38;stroke:#111;stroke-width:${sw}}.ref{fill:none;stroke:#3273b9;stroke-width:${preview?.45:.2};stroke-dasharray:2 1}.joint{stroke:#b54535;stroke-width:${preview?.7:.25};stroke-dasharray:3 1}.label,.dimensions{font-family:Arial,sans-serif;font-size:${preview?4:3.2}px;fill:#333}.dimensions line{stroke:#555;stroke-width:${preview?.35:.18};fill:none}</style><g id="NECK_OUTLINE"><path d="${g.headPath}" class="head"/><path d="${g.neckPath}" class="neck"/><path d="M ${g.heelArcEndX} ${g.heelBottom} L ${g.joint} ${g.heelBottom} L ${g.joint} ${g.bodyDepth} L ${g.heelArcEndX} ${g.bodyDepth} Z" class="cap"/>${board}${nut}</g><g id="REFERENCE_LINES">${frets}<line x1="${g.joint}" y1="${-g.board-5}" x2="${g.joint}" y2="${g.bodyDepth+5}" class="joint"/>${dims}</g></svg>`;
+}
+function updateConversions(){for(const id of DIM_IDS){const el=document.querySelector(`small[data-for="${id}"]`);if(!el)continue;try{const mm=parseMeasurement($(id).value,$("units").value);el.textContent=$("units").value==="in"?`${mm.toFixed(2)} mm`:`${(mm/25.4).toFixed(4)} in`}catch{el.textContent=""}}}
+function render(){const m=$("message");try{const p=parameters(),g=geometry(p);currentGeometry=g;currentSvg=svgFor(g,false);const doc=new DOMParser().parseFromString(svgFor(g,true),"image/svg+xml"),node=document.importNode(doc.documentElement,true);node.removeAttribute("width");node.removeAttribute("height");node.id="preview";$("preview").replaceWith(node);$("sJoint").textContent=shown(g.joint);$("sPlane").textContent=shown(g.plane);$("sRadius").textContent=shown(g.radius);$("sOverall").textContent=shown(g.maxX-g.minX);if(g.autoRadius)$("heelRadius").value=$("units").value==="in"?(g.radius/25.4).toFixed(3):g.radius.toFixed(2);updateConversions();m.className="status ok";m.textContent="Neck template generated."}catch(e){m.className="status error";m.textContent=e.message}}
+function cleanName(){return ($("exportName").value||"Usonian Neck Template").trim().replace(/\.svg$/i,"").replace(/[\\/:*?"<>|]+/g,"-")||"Usonian Neck Template"}
+async function download(){render();if(!currentSvg)return;const name=cleanName()+".svg",blob=new Blob([currentSvg],{type:"image/svg+xml;charset=utf-8"});if("showSaveFilePicker" in window){try{const h=await showSaveFilePicker({suggestedName:name,types:[{description:"SVG image",accept:{"image/svg+xml":[".svg"]}}]}),w=await h.createWritable();await w.write(blob);await w.close();$("message").textContent=`Saved “${h.name}”.`;return}catch(e){if(e.name==="AbortError")return}}const u=URL.createObjectURL(blob),a=document.createElement("a");a.href=u;a.download=name;a.click();setTimeout(()=>URL.revokeObjectURL(u),1000)}
+function printTemplate(){render();if(!currentGeometry)return;const g=currentGeometry,pageW=279.4,pageH=215.9,margin=10,usableW=pageW-margin*2,usableH=pageH-margin*2,overlap=12,totalW=g.maxX-g.minX+20,totalH=g.maxY-g.minY+20,cols=Math.ceil(Math.max(1,(totalW-overlap)/(usableW-overlap))),rows=Math.ceil(Math.max(1,(totalH-overlap)/(usableH-overlap))),area=$("printArea");area.innerHTML="";let page=0;for(let row=0;row<rows;row++)for(let col=0;col<cols;col++){page++;const ox=g.minX-10+col*(usableW-overlap),oy=g.minY-10+row*(usableH-overlap),div=document.createElement("div");div.className="print-sheet";div.style.width=pageW/25.4+"in";div.style.height=pageH/25.4+"in";div.innerHTML=`<svg xmlns="http://www.w3.org/2000/svg" width="${pageW}mm" height="${pageH}mm" viewBox="0 0 ${pageW} ${pageH}"><defs><clipPath id="c${page}"><rect x="${margin}" y="${margin}" width="${usableW}" height="${usableH}"/></clipPath></defs><rect width="100%" height="100%" fill="white"/><g clip-path="url(#c${page})" transform="translate(${margin-ox} ${margin-oy})">${svgFor(g,false).replace(/^<svg[^>]*>|<\/svg>$/g,"")}</g><g stroke="#555" stroke-width=".2"><path d="M ${margin-4} ${pageH/2}h8M${margin} ${pageH/2-4}v8M${pageW-margin-4} ${pageH/2}h8M${pageW-margin} ${pageH/2-4}v8"/></g><line x1="${margin}" y1="${pageH-7}" x2="${margin+25.4}" y2="${pageH-7}" stroke="#000" stroke-width=".5"/><text x="${margin}" y="${pageH-2.5}" font-family="Arial" font-size="3">1 inch calibration · Page ${page} of ${rows*cols} · Landscape · 100% / Actual Size</text></svg>`;area.appendChild(div)}$("message").textContent=`Prepared ${rows*cols} tiled print pages with 12 mm overlap.`;window.print()}
+function reset(){for(const [id,v] of Object.entries(defaults)){const e=$(id);if(!e)continue;if(typeof v==="boolean")e.checked=v;else e.value=v}$("heelRadius").disabled=true;render()}
+$("generate").onclick=render;$("download").onclick=download;$("print").onclick=printTemplate;$("reset").onclick=reset;$("autoRadius").onchange=()=>{$("heelRadius").disabled=$("autoRadius").checked;render()};for(const id of DIM_IDS)$(id).addEventListener("change",render);["jointFret","frets","includeFretboard","thicknessIncludesBoard","headstockAngle","showFrets","showDimensions"].forEach(id=>$(id).addEventListener("change",render));$("units").addEventListener("change",()=>{updateConversions();render()});render();
+})();
+</script>
+</body>
+</html>
