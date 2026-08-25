@@ -3,33 +3,61 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width,initial-scale=1">
-  <title>Usonian Web Tools</title>
+  <title>Usonian Guitar Co. | Web Tools</title>
   <style>
     :root{--walnut:#4b2e15;--copper:#c16e36;--paper:#fffdf8;--ink:#2e2e2e;--muted:#6d675f}
     *{box-sizing:border-box}
     body{margin:0;font-family:Arial,Helvetica,sans-serif;background:#f4f1ea;color:var(--ink)}
-    header{background:var(--walnut);color:white;border-bottom:5px solid var(--copper);padding:36px 22px}
-    header div,main,footer{max-width:1040px;margin:auto}
+    header{background:var(--walnut);color:white;border-bottom:5px solid var(--copper)}
+    .topbar{max-width:1040px;margin:auto;padding:18px 22px;display:flex;align-items:center;justify-content:space-between;gap:22px}
+    .brand{color:white;text-decoration:none;font-weight:800;font-size:1.25rem}
+    nav{display:flex;gap:18px;flex-wrap:wrap;justify-content:flex-end}
+    nav a{color:#f1e7d8;text-decoration:none;font-weight:700}
+    nav a:hover,nav a[aria-current="page"]{color:white;text-decoration:underline;text-underline-offset:5px}
+    .hero{max-width:1040px;margin:auto;padding:34px 22px 40px}
     h1{margin:0 0 8px;font-size:clamp(2rem,6vw,3.5rem)}
     header p{margin:0;color:#f1e7d8;font-size:1.08rem}
+    main,footer{max-width:1040px;margin:auto}
     main{padding:34px 22px 42px}
     .intro{margin:0 0 24px;color:var(--muted)}
+    .feature{background:var(--paper);border:1px solid #d4cec2;border-radius:12px;padding:26px;margin-bottom:24px;box-shadow:0 4px 14px rgba(0,0,0,.06);display:flex;align-items:center;justify-content:space-between;gap:26px}
+    .feature h2{margin:0 0 8px;color:var(--walnut)}
+    .feature p{margin:0;color:var(--muted);line-height:1.5;max-width:700px}
+    .feature a,.card a{display:inline-block;background:var(--copper);color:white;text-decoration:none;font-weight:700;padding:11px 16px;border-radius:7px;white-space:nowrap}
+    .feature a:hover,.card a:hover{background:#a75b2b}
     .tools{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:18px}
     .card{display:flex;flex-direction:column;background:var(--paper);border:1px solid #d4cec2;border-radius:12px;padding:24px;box-shadow:0 4px 14px rgba(0,0,0,.06)}
     .card h2{margin:0 0 9px;color:var(--walnut)}
     .card p{margin:0 0 22px;line-height:1.5;color:var(--muted);flex:1}
-    .card a{display:inline-block;align-self:flex-start;background:var(--copper);color:white;text-decoration:none;font-weight:700;padding:11px 16px;border-radius:7px}
-    .card a:hover{background:#a75b2b}
+    .card a{align-self:flex-start}
     footer{padding:0 22px 28px;color:#777;text-align:center;font-size:.9rem}
-    @media(max-width:700px){.tools{grid-template-columns:1fr}}
+    @media(max-width:700px){.topbar{align-items:flex-start;flex-direction:column}.tools{grid-template-columns:1fr}.feature{align-items:flex-start;flex-direction:column}nav{justify-content:flex-start}}
   </style>
 </head>
 <body>
-  <header><div>
-    <h1>Usonian Web Tools</h1>
-    <p>Practical browser-based tools for guitar building and CNC work.</p>
-  </div></header>
+  <header>
+    <div class="topbar">
+      <a class="brand" href="./">Usonian Guitar Co.</a>
+      <nav aria-label="Main navigation">
+        <a href="./" aria-current="page">Web Tools</a>
+        <a href="./products-services/">Products &amp; Services</a>
+        <a href="mailto:usonianguitar@outlook.com">Contact</a>
+      </nav>
+    </div>
+    <div class="hero">
+      <h1>Usonian Web Tools</h1>
+      <p>Practical browser-based tools for guitar building and CNC work.</p>
+    </div>
+  </header>
   <main>
+    <section class="feature" aria-label="Products and services">
+      <div>
+        <h2>Tools, Templates &amp; Custom Manufacturing</h2>
+        <p>Explore custom guitar templates, radius dishes, body molds, side bending jigs, 3D printing, custom fixtures, CNC fabrication, and design services for luthiers and guitar builders.</p>
+      </div>
+      <a href="./products-services/">Products &amp; Services</a>
+    </section>
+
     <p class="intro">Choose a tool. Everything runs in your browser; no installation or account is required.</p>
     <section class="tools" aria-label="Available tools">
       <article class="card">
@@ -55,6 +83,5 @@
     </section>
   </main>
   <footer>Usonian Guitar Co. · Web Tools</footer>
-  <!-- deployment trigger: 2026-08-24 neck-template-v1 -->
 </body>
 </html>
