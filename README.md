@@ -6,7 +6,7 @@ Browser-based tools for guitar building and CNC work.
 
 - **Fretboard Generator v4.1.0** — custom fretboard layout with saved designs and Easel-compatible SVG exports.
 - **Radius Dish Creator v0.2.2** — 3D preview plus STL and Easel-compatible G-code exports.
-- **Neck Template Generator v1.2.0** — bolt-on neck side-profile layout with the selected finished-thickness and transition-curve defaults, automatic inch/mm conversion, a three-point draggable editor, transition-focused zoom, SVG export, and portrait tiled 1:1 printing.
+- **Neck Template Generator v1.2.1** — bolt-on neck side-profile layout with no-space unit entry, CAD-style wheel zoom/right-drag rotation/Ctrl-right-drag panning, a three-point transition editor, SVG export, and portrait tiled 1:1 printing.
 
 ## GitHub Pages
 
