@@ -76,7 +76,7 @@ let currentSvg="",currentGeometry=null,transitionEdit=structuredClone(DEFAULT_TR
 function parseMeasurement(raw,defaultUnit){
   let s=String(raw??"").trim().toLowerCase().replace(/[″”]/g,'"').replace(/[′’]/g,"'");
   if(!s)throw Error("Enter a measurement in every dimension field.");
-  let unit=defaultUnit;if(/mm\b/.test(s))unit="mm";else if(/(?:in|inch|inches)\b|\"/.test(s))unit="in";
+  let unit=defaultUnit;if(/(?:mm|millimeters?)\b/.test(s))unit="mm";else if(/(?:in|inch|inches)\b|\"/.test(s))unit="in";
   s=s.replace(/\s*(?:mm|millimeters?|in|inches?)\b|[\"']/g,"").trim();
   if(!/^[0-9.\s+\-/]+$/.test(s))throw Error(`Invalid measurement “${raw}”.`);
   let value;
