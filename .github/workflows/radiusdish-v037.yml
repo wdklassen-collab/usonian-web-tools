@@ -1,0 +1,37 @@
+name: Radius Dish v0.3.7 Patch
+
+on:
+  push:
+    paths:
+      - '.github/workflows/radiusdish-v037.yml'
+
+permissions:
+  contents: write
+
+jobs:
+  patch:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Patch Radius Dish Creator
+        shell: python
+        run: |
+          from pathlib import Path
+          p = Path('radiusdishcreator/index.html')
+          s = p.read_text()
+          s = s.replace('v0.3.6', 'v0.3.7')
+          s = s.replace('<div class="stat"><span>G-code work zero</span><strong>Lower-left of stock</strong></div>', '<div class="stat"><span>G-code work zero</span><strong>Lower-left of stock</strong></div><div class="stat"><span>Easel stock sizing</span><strong>Exact dish size</strong></div>')
+          s = s.replace('G-code uses <strong>X0/Y0 at the lower-left corner of the stock</strong> and <strong>Z0 at the top surface</strong>. The dish center is automatically positioned at half the stock width and length.', 'G-code uses <strong>X0/Y0 at the lower-left corner of the stock</strong> and <strong>Z0 at the top surface</strong>. The dish center is automatically positioned at half the stock width and length. Safe-Z perimeter moves make Easel recognize the exact requested stock size so the dish appears centered on the material.')
+          old = "function gcode(q){const e=valid(q);if(e)throw Error(e);const lines=[q.unit==='in'?'G20':'G21','G17','G90','G94','G54',`M3 S${Math.round(q.spindle)}`];if(I.carveMode.value==='single'){emitPoints(lines,q,spiralPoints(q,q.singleStep),q.singleFeed)}else{for(const pass of roughPasses(q))emitPoints(lines,q,pass.pts,q.roughFeed);emitPoints(lines,q,spiralPoints(q,q.finishStep),q.finishFeed)}lines.push('M5','M30');return lines.join('\\n')}"
+          new = "function gcode(q){const e=valid(q);if(e)throw Error(e);const s=q.unit==='in'?1/MM_PER_IN:1,w=q.width*s,h=q.length*s,z=q.safe*s;const lines=[q.unit==='in'?'G20':'G21','G17','G90','G94','G54',`M3 S${Math.round(q.spindle)}`,`G0 Z${fmt(z)}`,'G0 X0 Y0',`G0 X${fmt(w)} Y0`,`G0 X${fmt(w)} Y${fmt(h)}`,`G0 X0 Y${fmt(h)}`,'G0 X0 Y0'];if(I.carveMode.value==='single'){emitPoints(lines,q,spiralPoints(q,q.singleStep),q.singleFeed)}else{for(const pass of roughPasses(q))emitPoints(lines,q,pass.pts,q.roughFeed);emitPoints(lines,q,spiralPoints(q,q.finishStep),q.finishFeed)}lines.push('M5','M30');return lines.join('\\n')}"
+          if old not in s:
+              raise SystemExit('gcode function not found')
+          s = s.replace(old, new)
+          p.write_text(s)
+      - name: Commit patch
+        run: |
+          git config user.name "wdklassen-collab"
+          git config user.email "wdklassen@gmail.com"
+          git add radiusdishcreator/index.html
+          git commit -m "Radius Dish Creator v0.3.7 center on exact Easel stock"
+          git push
