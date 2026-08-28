@@ -1,0 +1,61 @@
+name: Radius Dish v0.3.8 Origin Selector
+
+on:
+  push:
+    paths:
+      - '.github/workflows/radiusdish-v038.yml'
+
+permissions:
+  contents: write
+
+jobs:
+  patch:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Patch Radius Dish Creator
+        shell: python
+        run: |
+          from pathlib import Path
+          p = Path('radiusdishcreator/index.html')
+          s = p.read_text()
+          s = s.replace('v0.3.7', 'v0.3.8')
+          s = s.replace('<div class="stat"><span>G-code work zero</span><strong>Lower-left of stock</strong></div><div class="stat"><span>Easel stock sizing</span><strong>Exact dish size</strong></div>', '<div class="stat"><span>G-code work zero</span><strong id="originStat">Lower-left of stock</strong></div><div class="stat"><span>Easel stock sizing</span><strong id="easelStat">Exact dish size</strong></div>')
+          old_notice = '<div class="notice">G-code uses <strong>X0/Y0 at the lower-left corner of the stock</strong> and <strong>Z0 at the top surface</strong>. The dish center is automatically positioned at half the stock width and length. Safe-Z perimeter moves make Easel recognize the exact requested stock size so the dish appears centered on the material. All spirals run <strong>outside toward center</strong>. Rough + Finish treats Max depth / pass as a hard limit. Each deeper roughing level starts farther inward, so already-cleared outer areas are not repeatedly recut.</div>'
+          new_notice = '<div class="notice">Choose the G-code work zero below. <strong>Lower-left</strong> is recommended for Easel and keeps the whole job in positive X/Y coordinates. <strong>Center of dish</strong> creates a true center-origin file for GRBL senders such as Candle or UGS; Easel can import it, but its preview will extend into negative X/Y. Z0 is always the top surface. All spirals run <strong>outside toward center</strong>.</div><div class="field"><label for="origin">Origin / Work Zero</label><select id="origin"><option value="lowerleft" selected>Lower-left of stock (Easel)</option><option value="center">Center of dish (GRBL / advanced)</option></select></div>'
+          if old_notice not in s:
+              raise SystemExit('notice block not found')
+          s = s.replace(old_notice, new_notice)
+          old_i = "const I={units:$('units'),length:$('length'),width:$('width'),radius:$('radius'),radiusUnit:$('radiusUnit'),thickness:$('thickness'),carveMode:$('carveMode'),toolDiameter:$('toolDiameter'),singleStepover:$('singleStepover'),singleFeed:$('singleFeed'),roughStepover:$('roughStepover'),maxDepth:$('maxDepth'),roughFeed:$('roughFeed'),finishStepover:$('finishStepover'),finishFeed:$('finishFeed'),plungeRate:$('plungeRate'),safeZ:$('safeZ'),spindle:$('spindle')};"
+          new_i = "const I={units:$('units'),length:$('length'),width:$('width'),radius:$('radius'),radiusUnit:$('radiusUnit'),thickness:$('thickness'),origin:$('origin'),carveMode:$('carveMode'),toolDiameter:$('toolDiameter'),singleStepover:$('singleStepover'),singleFeed:$('singleFeed'),roughStepover:$('roughStepover'),maxDepth:$('maxDepth'),roughFeed:$('roughFeed'),finishStepover:$('finishStepover'),finishFeed:$('finishFeed'),plungeRate:$('plungeRate'),safeZ:$('safeZ'),spindle:$('spindle')};"
+          if old_i not in s:
+              raise SystemExit('I object not found')
+          s = s.replace(old_i, new_i)
+          old_update = "$('timeStat').textContent=timeText(estimate(q));$('message').textContent='';$('message').className='message';return q}"
+          new_update = "$('timeStat').textContent=timeText(estimate(q));const center=I.origin.value==='center';$('originStat').textContent=center?'Center of dish':'Lower-left of stock';$('easelStat').textContent=center?'Preview uses negative X/Y':'Exact dish size';$('message').textContent='';$('message').className='message';return q}"
+          if old_update not in s:
+              raise SystemExit('update tail not found')
+          s = s.replace(old_update, new_update)
+          old_gline = "function gLine(q,pt,feed){const s=q.unit==='in'?1/MM_PER_IN:1;return`G1 X${fmt((pt.x+q.width/2)*s)} Y${fmt((pt.y+q.length/2)*s)} Z${fmt(pt.z*s)} F${fmt(feed,2)}`}"
+          new_gline = "function gLine(q,pt,feed){const s=q.unit==='in'?1/MM_PER_IN:1,center=I.origin.value==='center',ox=center?0:q.width/2,oy=center?0:q.length/2;return`G1 X${fmt((pt.x+ox)*s)} Y${fmt((pt.y+oy)*s)} Z${fmt(pt.z*s)} F${fmt(feed,2)}`}"
+          if old_gline not in s:
+              raise SystemExit('gLine not found')
+          s = s.replace(old_gline, new_gline)
+          old_emit = "function emitPoints(lines,q,pts,feed){if(!pts.length)return;const s=q.unit==='in'?1/MM_PER_IN:1,st=pts[0];lines.push(`G0 Z${fmt(q.safe*s)}`,`G0 X${fmt((st.x+q.width/2)*s)} Y${fmt((st.y+q.length/2)*s)}`,`G1 Z${fmt(st.z*s)} F${fmt(q.plunge,2)}`);for(let i=1;i<pts.length;i++)lines.push(gLine(q,pts[i],feed));lines.push(`G0 Z${fmt(q.safe*s)}`)}"
+          new_emit = "function emitPoints(lines,q,pts,feed){if(!pts.length)return;const s=q.unit==='in'?1/MM_PER_IN:1,st=pts[0],center=I.origin.value==='center',ox=center?0:q.width/2,oy=center?0:q.length/2;lines.push(`G0 Z${fmt(q.safe*s)}`,`G0 X${fmt((st.x+ox)*s)} Y${fmt((st.y+oy)*s)}`,`G1 Z${fmt(st.z*s)} F${fmt(q.plunge,2)}`);for(let i=1;i<pts.length;i++)lines.push(gLine(q,pts[i],feed));lines.push(`G0 Z${fmt(q.safe*s)}`)}"
+          if old_emit not in s:
+              raise SystemExit('emitPoints not found')
+          s = s.replace(old_emit, new_emit)
+          old_gc = "function gcode(q){const e=valid(q);if(e)throw Error(e);const s=q.unit==='in'?1/MM_PER_IN:1,w=q.width*s,h=q.length*s,z=q.safe*s;const lines=[q.unit==='in'?'G20':'G21','G17','G90','G94','G54',`M3 S${Math.round(q.spindle)}`,`G0 Z${fmt(z)}`,'G0 X0 Y0',`G0 X${fmt(w)} Y0`,`G0 X${fmt(w)} Y${fmt(h)}`,`G0 X0 Y${fmt(h)}`,'G0 X0 Y0'];if(I.carveMode.value==='single'){emitPoints(lines,q,spiralPoints(q,q.singleStep),q.singleFeed)}else{for(const pass of roughPasses(q))emitPoints(lines,q,pass.pts,q.roughFeed);emitPoints(lines,q,spiralPoints(q,q.finishStep),q.finishFeed)}lines.push('M5','M30');return lines.join('\\n')}"
+          new_gc = "function gcode(q){const e=valid(q);if(e)throw Error(e);const s=q.unit==='in'?1/MM_PER_IN:1,w=q.width*s,h=q.length*s,z=q.safe*s,center=I.origin.value==='center';const lines=[q.unit==='in'?'G20':'G21','G17','G90','G94','G54',`M3 S${Math.round(q.spindle)}`,`G0 Z${fmt(z)}`];if(!center)lines.push('G0 X0 Y0',`G0 X${fmt(w)} Y0`,`G0 X${fmt(w)} Y${fmt(h)}`,`G0 X0 Y${fmt(h)}`,'G0 X0 Y0');if(I.carveMode.value==='single'){emitPoints(lines,q,spiralPoints(q,q.singleStep),q.singleFeed)}else{for(const pass of roughPasses(q))emitPoints(lines,q,pass.pts,q.roughFeed);emitPoints(lines,q,spiralPoints(q,q.finishStep),q.finishFeed)}lines.push('M5','M30');return lines.join('\\n')}"
+          if old_gc not in s:
+              raise SystemExit('gcode not found')
+          s = s.replace(old_gc, new_gc)
+          p.write_text(s)
+      - name: Commit patch
+        run: |
+          git config user.name "wdklassen-collab"
+          git config user.email "wdklassen@gmail.com"
+          git add radiusdishcreator/index.html
+          git commit -m "Radius Dish Creator v0.3.8 add work-zero selector"
+          git push
