@@ -1,0 +1,43 @@
+name: Radius Dish v0.3.6 Patch
+
+on:
+  push:
+    paths:
+      - '.github/workflows/radiusdish-v036.yml'
+
+permissions:
+  contents: write
+
+jobs:
+  patch:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Patch radius dish creator
+        shell: bash
+        run: |
+          python3 - <<'PY'
+          from pathlib import Path
+          p = Path('radiusdishcreator/index.html')
+          s = p.read_text()
+          replacements = [
+            ('v0.3.5','v0.3.6'),
+            ('<div class="stat"><span>G-code work zero</span><strong>Dish center</strong></div>','<div class="stat"><span>G-code work zero</span><strong>Lower-left of stock</strong></div>'),
+            ('G-code uses <strong>X0/Y0 at the center of the dish</strong> and <strong>Z0 at the top surface</strong>.','G-code uses <strong>X0/Y0 at the lower-left corner of the stock</strong> and <strong>Z0 at the top surface</strong>. The dish center is automatically positioned at half the stock width and length.'),
+            ("function gLine(q,pt,feed){const s=q.unit==='in'?1/MM_PER_IN:1;return`G1 X${fmt(pt.x*s)} Y${fmt(pt.y*s)} Z${fmt(pt.z*s)} F${fmt(feed,2)}`}","function gLine(q,pt,feed){const s=q.unit==='in'?1/MM_PER_IN:1;return`G1 X${fmt((pt.x+q.width/2)*s)} Y${fmt((pt.y+q.length/2)*s)} Z${fmt(pt.z*s)} F${fmt(feed,2)}`}"),
+            ("function emitPoints(lines,q,pts,feed){if(!pts.length)return;const s=q.unit==='in'?1/MM_PER_IN:1,st=pts[0];lines.push(`G0 Z${fmt(q.safe*s)}`,`G0 X${fmt(st.x*s)} Y${fmt(st.y*s)}`,`G1 Z${fmt(st.z*s)} F${fmt(q.plunge,2)}`);for(let i=1;i<pts.length;i++)lines.push(gLine(q,pts[i],feed));lines.push(`G0 Z${fmt(q.safe*s)}`)}","function emitPoints(lines,q,pts,feed){if(!pts.length)return;const s=q.unit==='in'?1/MM_PER_IN:1,st=pts[0];lines.push(`G0 Z${fmt(q.safe*s)}`,`G0 X${fmt((st.x+q.width/2)*s)} Y${fmt((st.y+q.length/2)*s)}`,`G1 Z${fmt(st.z*s)} F${fmt(q.plunge,2)}`);for(let i=1;i<pts.length;i++)lines.push(gLine(q,pts[i],feed));lines.push(`G0 Z${fmt(q.safe*s)}`)}")
+          ]
+          for old,new in replacements:
+              if old not in s:
+                  raise SystemExit(f'Missing expected text: {old[:80]}')
+              s=s.replace(old,new,1)
+          p.write_text(s)
+          PY
+      - name: Commit v0.3.6
+        shell: bash
+        run: |
+          git config user.name "wdklassen-collab"
+          git config user.email "wdklassen@gmail.com"
+          git add radiusdishcreator/index.html
+          git commit -m "Radius Dish Creator v0.3.6 lower-left Easel origin"
+          git push
