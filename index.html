@@ -1,33 +1,87 @@
 <!doctype html>
 <html lang="en">
 <head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width,initial-scale=1">
-<meta name="description" content="Usonian Guitar Co. builds precision lutherie tools, templates, radius dishes and free web tools for guitar builders.">
-<title>Usonian Guitar Co. | Tools for Guitar Builders</title>
-<style>
-:root{--bg:#0d0f10;--panel:#131618;--copper:#c66f3d;--copper2:#e2a06f;--cream:#f2eee7;--muted:#b8afa6;--line:rgba(198,111,61,.32)}
-*{box-sizing:border-box}html{scroll-behavior:smooth}body{margin:0;background:var(--bg);color:var(--cream);font-family:Inter,ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif}a{color:inherit}.wrap{width:min(1460px,calc(100% - 56px));margin:auto}
-header{position:sticky;top:0;z-index:20;background:rgba(13,15,16,.94);backdrop-filter:blur(12px);border-bottom:1px solid rgba(198,111,61,.18)}
-.nav{min-height:112px;display:flex;align-items:center;justify-content:space-between;gap:36px}.brand{display:block;line-height:0;flex:0 0 auto}.brand img{display:block;width:390px;max-width:38vw;height:auto;filter:brightness(1.55) contrast(1.04)}.links{display:flex;align-items:center;gap:34px;flex-wrap:wrap;justify-content:flex-end}.links a{text-decoration:none;text-transform:uppercase;letter-spacing:.13em;font-size:.84rem;font-weight:700;color:#eee7df}.links a:hover{color:var(--copper2)}
-.hero{position:relative;overflow:hidden;min-height:760px;border-bottom:1px solid rgba(198,111,61,.22)}.hero-grid{display:grid;grid-template-columns:.95fr 1.25fr;gap:36px;align-items:center;min-height:760px;padding:72px 0 54px}.copy{position:relative;z-index:2;max-width:650px}.kicker{color:var(--copper);letter-spacing:.18em;text-transform:uppercase;font-size:.84rem;font-weight:800;margin-bottom:24px}.hero h1{font-family:"Arial Narrow","Roboto Condensed",Arial,sans-serif;font-stretch:condensed;text-transform:uppercase;font-size:clamp(3.6rem,6.3vw,7.3rem);line-height:.94;letter-spacing:.035em;margin:0;color:#efece6;font-weight:700}.rule{width:92px;height:3px;background:var(--copper);margin:34px 0}.lead{font-size:clamp(1.1rem,1.7vw,1.55rem);line-height:1.55;color:#d5cec7;max-width:600px;margin:0 0 34px}.cta{display:inline-flex;align-items:center;justify-content:center;border:1px solid var(--copper);padding:17px 28px;text-decoration:none;text-transform:uppercase;letter-spacing:.11em;font-size:.9rem;font-weight:800;color:var(--copper2);transition:.2s}.cta:hover{background:var(--copper);color:#111;transform:translateY(-2px)}
-.art{position:relative;min-height:610px}.gridbg{position:absolute;inset:0;background-image:linear-gradient(rgba(198,111,61,.09) 1px,transparent 1px),linear-gradient(90deg,rgba(198,111,61,.09) 1px,transparent 1px);background-size:52px 52px;mask-image:linear-gradient(90deg,transparent 0,black 12%,black 90%,transparent 100%)}.art svg{position:absolute;inset:-4% -6% -5% -2%;width:112%;height:112%;overflow:visible}.g{fill:none;stroke:var(--copper);stroke-width:1.5;vector-effect:non-scaling-stroke}.faint{stroke:rgba(198,111,61,.38);stroke-width:1}.dash{stroke-dasharray:8 11}.bright{stroke:var(--copper2);stroke-width:2.4;filter:drop-shadow(0 0 8px rgba(226,160,111,.22));stroke-dasharray:1800;stroke-dashoffset:1800;animation:draw 5s ease forwards}.spin{transform-origin:50% 50%;animation:drift 18s linear infinite}.pulse{animation:pulse 3.2s ease-in-out infinite}@keyframes draw{to{stroke-dashoffset:0}}@keyframes drift{to{transform:rotate(360deg)}}@keyframes pulse{50%{opacity:.45}}
-.badges{display:grid;grid-template-columns:repeat(4,1fr);gap:0;border-top:1px solid rgba(198,111,61,.22);background:#0a0c0d}.badge{min-height:152px;padding:32px 28px;border-right:1px solid rgba(198,111,61,.22);display:flex;gap:18px;align-items:center}.badge:last-child{border-right:0}.icon{width:54px;height:54px;display:grid;place-items:center;color:var(--copper);font-size:2rem;flex:0 0 auto}.badge strong{display:block;font-size:.94rem;letter-spacing:.11em;text-transform:uppercase;margin-bottom:8px}.badge span{color:var(--muted);font-size:.9rem;line-height:1.45}
-.section{padding:92px 0;border-top:1px solid rgba(255,255,255,.05)}.section-head{display:flex;justify-content:space-between;gap:36px;align-items:end;margin-bottom:38px}.section-head h2{margin:0;font-family:"Arial Narrow","Roboto Condensed",Arial,sans-serif;text-transform:uppercase;letter-spacing:.04em;font-size:clamp(2.4rem,4.5vw,4.8rem);line-height:.95}.section-head p{margin:0;max-width:570px;color:var(--muted);line-height:1.6}.tools{display:grid;grid-template-columns:repeat(2,1fr);gap:18px}.tool{position:relative;overflow:hidden;min-height:280px;padding:30px;border:1px solid rgba(198,111,61,.26);background:linear-gradient(145deg,#101315,#15191b);text-decoration:none;transition:.2s}.tool:hover{border-color:var(--copper);transform:translateY(-4px)}.tool:after{content:"";position:absolute;width:220px;height:220px;border:1px solid rgba(198,111,61,.12);border-radius:50%;right:-60px;bottom:-85px;box-shadow:0 0 0 34px rgba(198,111,61,.025),0 0 0 68px rgba(198,111,61,.018)}.label{color:var(--copper);text-transform:uppercase;letter-spacing:.13em;font-size:.72rem;font-weight:800}.tool h3{font-size:1.8rem;margin:16px 0 10px}.tool p{color:var(--muted);line-height:1.55;max-width:520px;margin:0 0 30px}.go{color:var(--copper2);font-weight:800;letter-spacing:.04em}.custom{display:grid;grid-template-columns:1.2fr .8fr;gap:38px;align-items:center;padding:44px;border:1px solid rgba(198,111,61,.28);background:#101315}.custom h2{font-family:"Arial Narrow",Arial,sans-serif;font-size:clamp(2.5rem,4.7vw,5rem);text-transform:uppercase;line-height:.94;margin:0 0 18px}.custom p{color:var(--muted);line-height:1.65;max-width:700px}.custom .cta{justify-self:end}
-footer{padding:34px 0;border-top:1px solid rgba(198,111,61,.2);color:#8f877f;font-size:.88rem}.foot{display:flex;justify-content:space-between;gap:20px;flex-wrap:wrap}.foot a{text-decoration:none;color:#cfc5bb}
-@media(max-width:1000px){.brand img{width:320px}.hero-grid{grid-template-columns:1fr;min-height:auto;padding-top:56px}.hero{min-height:auto}.art{min-height:470px}.badges{grid-template-columns:repeat(2,1fr)}.badge:nth-child(2){border-right:0}.tools{grid-template-columns:1fr}.custom{grid-template-columns:1fr}.custom .cta{justify-self:start}}
-@media(max-width:700px){.wrap{width:min(100% - 30px,1460px)}.nav{min-height:auto;padding:12px 0;align-items:center}.brand img{width:min(285px,57vw);max-width:none}.links{gap:13px}.links a{font-size:.68rem}.links a:nth-child(2){display:none}.hero-grid{padding:44px 0 28px}.art{min-height:330px}.badges{grid-template-columns:1fr}.badge{border-right:0;border-bottom:1px solid rgba(198,111,61,.18);min-height:110px;padding:24px}.section{padding:66px 0}.section-head{display:block}.section-head p{margin-top:18px}.custom{padding:28px}.tool{min-height:250px}}
-@media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}.bright,.spin,.pulse{animation:none}.bright{stroke-dashoffset:0}}
-</style>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Usonian Guitar Co. | Web Tools</title>
+  <style>
+    :root{--walnut:#4b2e15;--copper:#c16e36;--paper:#fffdf8;--ink:#2e2e2e;--muted:#6d675f}
+    *{box-sizing:border-box}
+    body{margin:0;font-family:Arial,Helvetica,sans-serif;background:#f4f1ea;color:var(--ink)}
+    header{background:var(--walnut);color:white;border-bottom:5px solid var(--copper)}
+    .topbar{max-width:1040px;margin:auto;padding:18px 22px;display:flex;align-items:center;justify-content:space-between;gap:22px}
+    .brand{color:white;text-decoration:none;font-weight:800;font-size:1.25rem}
+    nav{display:flex;gap:18px;flex-wrap:wrap;justify-content:flex-end}
+    nav a{color:#f1e7d8;text-decoration:none;font-weight:700}
+    nav a:hover,nav a[aria-current="page"]{color:white;text-decoration:underline;text-underline-offset:5px}
+    .hero{max-width:1040px;margin:auto;padding:34px 22px 40px}
+    h1{margin:0 0 8px;font-size:clamp(2rem,6vw,3.5rem)}
+    header p{margin:0;color:#f1e7d8;font-size:1.08rem}
+    main,footer{max-width:1040px;margin:auto}
+    main{padding:34px 22px 42px}
+    .intro{margin:0 0 24px;color:var(--muted)}
+    .feature{background:var(--paper);border:1px solid #d4cec2;border-radius:12px;padding:26px;margin-bottom:24px;box-shadow:0 4px 14px rgba(0,0,0,.06);display:flex;align-items:center;justify-content:space-between;gap:26px}
+    .feature h2{margin:0 0 8px;color:var(--walnut)}
+    .feature p{margin:0;color:var(--muted);line-height:1.5;max-width:700px}
+    .feature a,.card a{display:inline-block;background:var(--copper);color:white;text-decoration:none;font-weight:700;padding:11px 16px;border-radius:7px;white-space:nowrap}
+    .feature a:hover,.card a:hover{background:#a75b2b}
+    .tools{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:18px}
+    .card{display:flex;flex-direction:column;background:var(--paper);border:1px solid #d4cec2;border-radius:12px;padding:24px;box-shadow:0 4px 14px rgba(0,0,0,.06)}
+    .card h2{margin:0 0 9px;color:var(--walnut)}
+    .card p{margin:0 0 22px;line-height:1.5;color:var(--muted);flex:1}
+    .card a{align-self:flex-start}
+    footer{padding:0 22px 28px;color:#777;text-align:center;font-size:.9rem}
+    @media(max-width:700px){.topbar{align-items:flex-start;flex-direction:column}.tools{grid-template-columns:1fr}.feature{align-items:flex-start;flex-direction:column}nav{justify-content:flex-start}}
+  </style>
 </head>
 <body>
-<header><div class="wrap nav"><a class="brand" href="./" aria-label="Usonian Guitar Co. home"><img src="./images/usonian-wordmark.webp" alt="Usonian Guitar Co."></a><nav class="links" aria-label="Main navigation"><a href="./products-services/">Tools &amp; Templates</a><a href="#web-tools">Web Tools</a><a href="./products-services/">Products &amp; Services</a><a href="mailto:usonianguitar@outlook.com">Contact</a></nav></div></header>
-<main>
-<section class="hero"><div class="wrap hero-grid"><div class="copy"><div class="kicker">Independent lutherie tools · Colorado</div><h1>Tools for<br>guitar builders<br>and luthiers</h1><div class="rule"></div><p class="lead">Precision tools, templates, and web apps designed to help you build better guitars.</p><a class="cta" href="./products-services/">Explore tools &amp; templates</a></div><div class="art" aria-hidden="true"><div class="gridbg"></div><svg viewBox="0 0 900 650" role="img"><circle class="g faint spin" cx="255" cy="245" r="150"/><circle class="g dash" cx="255" cy="245" r="112"/><circle class="g" cx="255" cy="245" r="62"/><path class="g dash" d="M100 245H760M255 70V520"/><circle class="g" cx="655" cy="430" r="112"/><circle class="g faint" cx="655" cy="430" r="86"/><circle class="g dash" cx="655" cy="430" r="52"/><path class="g bright" d="M84 565C280 530 345 400 420 230C486 80 618 68 774 102"/><path class="g" d="M130 610C322 560 408 475 502 330C590 195 692 184 852 210"/><path class="g faint" d="M180 635C350 590 475 520 580 382C671 260 758 270 890 315"/><path class="g bright" d="M514 632C535 508 552 380 598 240C633 135 700 72 838 85"/><path class="g dash" d="M465 610C500 470 520 332 577 205C622 105 710 50 858 62"/><path class="g" d="M560 630C610 510 650 365 740 250C790 185 835 150 892 132"/><path class="g" d="M608 170H875M608 210H875M608 250H875M608 290H875M608 330H875M608 370H875"/><path class="g faint" d="M620 100V545M675 100V545M730 100V545M785 100V545M840 100V545"/><path class="g dash" d="M120 478L760 478M170 120L760 590"/><circle class="g pulse" cx="255" cy="245" r="7" fill="var(--copper2)"/><circle class="g pulse" cx="655" cy="430" r="7" fill="var(--copper2)"/></svg></div></div></section>
-<section class="badges"><div class="badge"><div class="icon">⌖</div><div><strong>Precision design</strong><span>Built for repeatability and practical shop use.</span></div></div><div class="badge"><div class="icon">▣</div><div><strong>CNC ready</strong><span>Digital geometry and export tools for fabrication.</span></div></div><div class="badge"><div class="icon">◇</div><div><strong>Made in Colorado</strong><span>Designed and made for working guitar builders.</span></div></div><div class="badge"><div class="icon">△</div><div><strong>Built for luthiers</strong><span>Tools shaped by real bench problems.</span></div></div></section>
-<section class="section" id="web-tools"><div class="wrap"><div class="section-head"><div><div class="kicker">Free browser tools</div><h2>Design it. Build it.</h2></div><p>Use Usonian tools to lay out fretboards, generate neck geometry, create radius dishes, and print nut-spacing guides directly in your browser.</p></div><div class="tools"><a class="tool" href="./fretboard/"><div class="label">Web tool</div><h3>Fretboard Generator</h3><p>Create custom fretboard geometry and export CNC-ready SVG files.</p><div class="go">Open tool →</div></a><a class="tool" href="./radiusdishcreator/"><div class="label">Web tool</div><h3>Radius Dish Creator</h3><p>Generate spherical radius dishes, preview them in 3D, and export STL or G-code.</p><div class="go">Open tool →</div></a><a class="tool" href="./neck-template/"><div class="label">Web tool</div><h3>Neck Template Generator</h3><p>Build a full-size neck side profile with fret, heel, and headstock geometry.</p><div class="go">Open tool →</div></a><a class="tool" href="./nut-spacing/"><div class="label">Printable tool</div><h3>Nut Spacing Guide</h3><p>Print a proportional six-string nut-marking guide at full scale.</p><div class="go">Open guide →</div></a></div></div></section>
-<section class="section"><div class="wrap"><div class="custom"><div><div class="kicker">Custom work</div><h2>Need something we don't already make?</h2><p>Usonian designs and manufactures custom guitar templates, jigs, radius dishes, body molds, fixtures, CNC parts, and 3D-printed shop tools.</p></div><a class="cta" href="./products-services/">Products &amp; services</a></div></div></section>
-</main>
-<footer><div class="wrap foot"><span>Usonian Guitar Co. · Littleton, Colorado</span><span><a href="mailto:usonianguitar@outlook.com">usonianguitar@outlook.com</a></span></div></footer>
+  <header>
+    <div class="topbar">
+      <a class="brand" href="./">Usonian Guitar Co.</a>
+      <nav aria-label="Main navigation">
+        <a href="./" aria-current="page">Web Tools</a>
+        <a href="./products-services/">Products &amp; Services</a>
+        <a href="mailto:usonianguitar@outlook.com">Contact</a>
+      </nav>
+    </div>
+    <div class="hero">
+      <h1>Usonian Web Tools</h1>
+      <p>Practical browser-based tools for guitar building and CNC work.</p>
+    </div>
+  </header>
+  <main>
+    <section class="feature" aria-label="Products and services">
+      <div>
+        <h2>Tools, Templates &amp; Custom Manufacturing</h2>
+        <p>Explore custom guitar templates, radius dishes, body molds, side bending jigs, 3D printing, custom fixtures, CNC fabrication, and design services for luthiers and guitar builders.</p>
+      </div>
+      <a href="./products-services/">Products &amp; Services</a>
+    </section>
+
+    <p class="intro">Choose a tool. Everything runs in your browser; no installation or account is required.</p>
+    <section class="tools" aria-label="Available tools">
+      <article class="card">
+        <h2>Fretboard Generator</h2>
+        <p>Lay out a custom fretboard, save named designs, and export Easel-compatible SVG files for fret slots and the board outline.</p>
+        <a href="./fretboard/">Open Fretboard Generator</a>
+      </article>
+      <article class="card">
+        <h2>Radius Dish Creator</h2>
+        <p>Create a spherical radius dish, preview it in 3D, and export an STL or Easel-compatible G-code with multiple toolpath options.</p>
+        <a href="./radiusdishcreator/">Open Radius Dish Creator</a>
+      </article>
+      <article class="card">
+        <h2>Nut Spacing Guide</h2>
+        <p>Print a full-size 6-string nut-marking template with proportional string spacing, bass and treble labels, and a 1-inch calibration mark.</p>
+        <a href="./nut-spacing/">Open Nut Spacing Guide</a>
+      </article>
+      <article class="card">
+        <h2>Neck Template Generator</h2>
+        <p>Create a full-size bolt-on neck side profile with calculated fret geometry, optional fretboard, angled headstock, circular heel curve, and SVG or tiled paper output.</p>
+        <a href="./neck-template/">Open Neck Template Generator</a>
+      </article>
+    </section>
+  </main>
+  <footer>Usonian Guitar Co. · Web Tools</footer>
 </body>
 </html>
