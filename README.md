@@ -1,20 +1,29 @@
-# Usonian Web Tools
+# Usonian Guitar Co. Website & Web Tools
 
-Browser-based tools for guitar building and CNC work.
+This repository is the source code for **UsonianGuitar.com** and its browser-based lutherie tools.
 
-## Tools
+## Production architecture
 
-- **Fretboard Generator v4.1.0** — custom fretboard layout with saved designs and Easel-compatible SVG exports.
-- **Radius Dish Creator v0.3.4** — 3D preview with CAD-style wheel zoom, right-drag rotation, Ctrl-right-drag panning, view cube, and STL/Easel-compatible G-code exports.
-- **Neck Template Generator v1.2.1** — bolt-on neck side-profile layout with no-space unit entry, CAD-style wheel zoom/right-drag rotation/Ctrl-right-drag panning, a three-point transition editor, SVG export, and portrait tiled 1:1 printing.
+- **Source repository:** `wdklassen-collab/usonian-web-tools`
+- **Production branch:** `main`
+- **Cloudflare Worker:** `usonian-guitar-company`
+- **Production domains:** `https://usonianguitar.com` and `https://www.usonianguitar.com`
 
-## GitHub Pages
+> `usonian-web-tools` is the repository name. It is **not** a production Worker name and should never be used as a Cloudflare deployment target.
 
-The repository is organized for GitHub Pages:
+## Website and tools
 
 - Home: `/`
+- Products & Services: `/products-services/`
 - Fretboard Generator: `/fretboard/`
-- Radius Dish Creator: `/radius-dish/`
+- Radius Dish Creator: `/radiusdishcreator/`
 - Neck Template Generator: `/neck-template/`
+- Nut Spacing Guide: `/nut-spacing/`
 
-All processing and file generation runs in the browser. No server is required.
+All browser tools run client-side; no user account is required.
+
+## Deployment rule
+
+Every production deployment must target the Cloudflare Worker **`usonian-guitar-company`**. Do not create or deploy to a Worker named `usonian-web-tools`.
+
+See [`DEPLOYMENT.md`](DEPLOYMENT.md) for the canonical deployment map and troubleshooting checklist.
