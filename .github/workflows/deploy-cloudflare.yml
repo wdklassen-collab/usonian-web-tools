@@ -1,0 +1,41 @@
+name: Deploy Usonian Guitar Co.
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: usonian-guitar-production
+  cancel-in-progress: true
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+
+      - name: Build static site package
+        shell: bash
+        run: |
+          set -euo pipefail
+          rm -rf dist
+          mkdir -p dist
+          cp index.html dist/index.html
+          cp -R fretboard dist/fretboard
+          cp -R neck-template dist/neck-template
+          cp -R nut-spacing dist/nut-spacing
+          cp -R products-services dist/products-services
+          cp -R radius-dish dist/radius-dish
+          cp -R radiusdishcreator dist/radiusdishcreator
+
+      - name: Deploy to production Cloudflare Worker
+        uses: cloudflare/wrangler-action@v3
+        with:
+          apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+          command: deploy
